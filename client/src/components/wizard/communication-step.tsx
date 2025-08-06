@@ -1883,7 +1883,7 @@ export default function CommunicationStep({
             <p className="text-red-600">Error loading templates. Please try again.</p>
           </div>
         ) : (
-          formatTemplatesForAccordion(templatesData).map((category: TemplateCategory) => {
+          formatTemplatesForAccordion(legacyTemplatesData).map((category: TemplateCategory) => {
           const isExpanded = expandedCategories.includes(category.id);
           const toggleCategory = () => {
             setExpandedCategories(prev => 

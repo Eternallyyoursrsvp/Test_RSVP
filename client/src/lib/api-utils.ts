@@ -193,7 +193,7 @@ export async function apiRequest<T = any>(
       // Authentication error
       
       // Invalidate auth state
-      queryClient.invalidateQueries(["/api/auth/user"]);
+      queryClient.invalidateQueries({ queryKey: ["/api/auth/user"] });
     } else if ((error as ApiError).status === 403) {
       // Authorization error
       
@@ -302,11 +302,11 @@ export function createQueryFn<T>(options: {
  */
 export function invalidateRelatedQueries(resourcePath: string, id?: number | string): void {
   // Invalidate collection
-  queryClient.invalidateQueries([resourcePath]);
+  queryClient.invalidateQueries({ queryKey: [resourcePath] });
   
   // Invalidate specific resource if ID is provided
   if (id !== undefined) {
-    queryClient.invalidateQueries([`${resourcePath}/${id}`]);
+    queryClient.invalidateQueries({ queryKey: [`${resourcePath}/${id}`] });
   }
 }
 

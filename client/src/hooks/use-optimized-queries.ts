@@ -42,7 +42,7 @@ export function useOptimizedGuests(eventId?: number, page = 1, filters = {}) {
       
       return {
         guests: guestsResponse.data || [],
-        total: guestsResponse.total || 0,
+        total: guestsResponse.data?.total || 0,
         stats: statsResponse.data
       };
     },

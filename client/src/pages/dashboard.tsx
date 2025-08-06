@@ -128,7 +128,7 @@ export default function Dashboard() {
   if (isLoadingStats) {
     return (
       <DashboardLayout>
-        <EventLoadingState eventName={currentEvent?.title} />
+        <EventLoadingState eventName={currentEvent?.data?.title} />
       </DashboardLayout>
     );
   }
@@ -142,9 +142,9 @@ export default function Dashboard() {
           <div>
             <h1 className="text-4xl font-serif font-semibold text-foreground">Dashboard</h1>
             <p className="text-sm text-muted-foreground">
-              Wedding: <span className="font-medium">{currentEvent?.title || "Loading..."}</span> | 
+              Wedding: <span className="font-medium">{currentEvent?.data?.title || "Loading..."}</span> | 
               Dates: <span className="font-medium">
-                {currentEvent ? `${formatDateForDisplay(currentEvent.startDate)} - ${formatDateForDisplay(currentEvent.endDate)}` : "Loading..."}
+                {currentEvent?.data ? `${formatDateForDisplay(currentEvent.data.startDate)} - ${formatDateForDisplay(currentEvent.data.endDate)}` : "Loading..."}
               </span>
             </p>
           </div>
