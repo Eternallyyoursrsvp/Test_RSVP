@@ -440,7 +440,7 @@ export function AuthenticationConfigurationStep({
               <FormItem>
                 <FormLabel>JWT Expiration</FormLabel>
                 <FormControl>
-                  <Select value={field.value} onValueChange={field.onChange}>
+                  <Select value={String(field.value)} onValueChange={field.onChange}>
                     <SelectTrigger>
                       <SelectValue placeholder="Select expiration" />
                     </SelectTrigger>
@@ -1029,9 +1029,6 @@ export function AuthenticationConfigurationStep({
                 currentMethod={authMethod}
                 onMethodChange={handleAuthMethodChange}
                 showAdvanced={false}
-                mode="wizard"
-                isLoading={isLoadingAuthMethod}
-                className="w-full"
               />
             </CardContent>
           </Card>
