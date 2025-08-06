@@ -338,7 +338,7 @@ export default function GuestForm({ eventId, guest, initialData, onSubmit, onCan
         render={({ field }) => (
           <FormItem className="flex flex-row items-center space-x-3 space-y-0">
             <FormControl>
-              <Checkbox checked={field.value} onCheckedChange={field.onChange} />
+              <Checkbox checked={Boolean(field.value)} onCheckedChange={field.onChange} />
             </FormControl>
             <div className="space-y-1 leading-none">
               <FormLabel>Available on WhatsApp</FormLabel>
@@ -435,7 +435,7 @@ export default function GuestForm({ eventId, guest, initialData, onSubmit, onCan
         render={({ field }) => (
           <FormItem className="flex flex-row items-center space-x-3 space-y-0">
             <FormControl>
-              <Checkbox checked={field.value} onCheckedChange={field.onChange} />
+              <Checkbox checked={Boolean(field.value)} onCheckedChange={field.onChange} />
             </FormControl>
             <div className="space-y-1 leading-none">
               <FormLabel>Plus One Allowed</FormLabel>
@@ -494,12 +494,12 @@ export default function GuestForm({ eventId, guest, initialData, onSubmit, onCan
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <FormField
               control={form.control}
-              name={"childrenDetails." + index + ".name"}
+              name={`childrenDetails.${index}.name` as const}
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Name</FormLabel>
                   <FormControl>
-                    <Input placeholder="Child's name" {...field} value={field.value || ""} />
+                    <Input placeholder="Child's name" name={field.name} onChange={field.onChange} value={String(field.value || "")} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -507,12 +507,12 @@ export default function GuestForm({ eventId, guest, initialData, onSubmit, onCan
             />
             <FormField
               control={form.control}
-              name={"childrenDetails." + index + ".age"}
+              name={`childrenDetails.${index}.age` as const}
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Age</FormLabel>
                   <FormControl>
-                    <Input type="number" placeholder="Age" {...field} value={field.value || ""} onChange={(e) => field.onChange(parseInt(e.target.value) || 0)} />
+                    <Input type="number" placeholder="Age" name={field.name} value={String(field.value || "")} onChange={(e) => field.onChange(parseInt(e.target.value) || 0)} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -520,11 +520,11 @@ export default function GuestForm({ eventId, guest, initialData, onSubmit, onCan
             />
             <FormField
               control={form.control}
-              name={"childrenDetails." + index + ".gender"}
+              name={`childrenDetails.${index}.gender` as const}
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Gender</FormLabel>
-                  <Select onValueChange={field.onChange} defaultValue={field.value || ""}>
+                  <Select onValueChange={field.onChange} defaultValue={String(field.value || "")}>
                     <FormControl>
                       <SelectTrigger>
                         <SelectValue placeholder="Select" />
@@ -602,7 +602,7 @@ export default function GuestForm({ eventId, guest, initialData, onSubmit, onCan
         render={({ field }) => (
           <FormItem className="flex flex-row items-center space-x-3 space-y-0">
             <FormControl>
-              <Checkbox checked={field.value} onCheckedChange={field.onChange} />
+              <Checkbox checked={Boolean(field.value)} onCheckedChange={field.onChange} />
             </FormControl>
             <div className="space-y-1 leading-none">
               <FormLabel>Needs Accommodation</FormLabel>
