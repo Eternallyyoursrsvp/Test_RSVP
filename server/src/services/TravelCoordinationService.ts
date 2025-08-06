@@ -11,7 +11,7 @@ import {
   WeddingEvent,
   TransportGroup
 } from '@shared/schema';
-import { eq, and, desc, sql } from 'drizzle-orm';
+import { eq, and, or, desc, sql } from 'drizzle-orm';
 import { z } from 'zod';
 import { createObjectCsvStringifier } from 'csv-writer';
 import * as XLSX from 'sheetjs-style';
@@ -75,13 +75,13 @@ export class TravelCoordinationService {
     }
 
     // Combine guest and travel data
-    const guestsWithTravel = allGuests.map(guest => {
+    const guestsWithTravel = allGuests.map((guest: Guest) => {
       const travel = travelMap.get(guest.id);
       return {
         id: guest.id,
         guestId: guest.id,
-        guestName: `${guest.first_name} ${guest.last_name}`,
-        name: `${guest.first_name} ${guest.last_name}`,
+        guestName: `${guest.firstName} ${guest.lastName}`,
+        name: `${guest.firstName} ${guest.lastName}`,
         email: guest.email,
         phone: guest.phone,
         travelId: travel?.id || null,
@@ -96,16 +96,16 @@ export class TravelCoordinationService {
         airline: travel?.airline || null,
         terminal: travel?.terminal || null,
         gate: travel?.gate || null,
-        flightStatus: travel?.flight_status || 'scheduled',
+        flightStatus: travel?.flightStatus || 'scheduled',
         needsTransportation: travel?.needsTransportation || false,
-        specialRequirements: travel?.special_requirements || null
+        specialRequirements: travel?.specialRequirements || null
       };
     });
 
     // Transform data for flight coordination dashboard
     const flightData = guestsWithTravel
-      .filter(guest => guest.travelMode === 'air' && guest.arrivalDate)
-      .map(guest => ({
+      .filter((guest: any) => guest.travelMode === 'air' && guest.arrivalDate)
+      .map((guest: any) => ({
         id: guest.travelId,
         guestId: guest.id,
         guestName: guest.name,
@@ -152,13 +152,14 @@ export class TravelCoordinationService {
     // Get all guests for the event
     const guestList = await db
       .select({
-        name: guests.name,
+        firstName: guests.firstName,
+        lastName: guests.lastName,
         email: guests.email,
         phone: guests.phone,
         plusOneAllowed: guests.plusOneAllowed,
         plusOneConfirmed: guests.plusOneConfirmed,
         plusOneName: guests.plusOneName,
-        specialRequirements: guests.specialRequirements,
+        specialRequirements: travelInfo.specialRequirements,
         arrivalDate: travelInfo.arrivalDate,
         arrivalLocation: travelInfo.arrivalLocation,
         departureDate: travelInfo.departureDate,
@@ -259,7 +260,14 @@ export class TravelCoordinationService {
         const guest = await db
           .select()
           .from(guests)
-          .where(and(eq(guests.eventId, eventId), eq(guests.name, guestName)))
+          .where(and(
+            eq(guests.eventId, eventId), 
+            or(
+              eq(guests.firstName, guestName),
+              eq(guests.lastName, guestName),
+              sql`${guests.firstName} || ' ' || ${guests.lastName} = ${guestName}`
+            )
+          ))
           .limit(1);
 
         if (guest.length === 0) {
@@ -432,7 +440,7 @@ export class TravelCoordinationService {
     const flightGuests = await db
       .select({
         guestId: guests.id,
-        guestName: guests.name,
+        guestName: sql`${guests.firstName} || ' ' || ${guests.lastName}`,
         arrivalDate: travelInfo.arrivalDate,
         arrivalTime: travelInfo.arrivalTime,
         arrivalLocation: travelInfo.arrivalLocation,
@@ -689,14 +697,14 @@ export class TravelCoordinationService {
     const flightGuests = await db
       .select({
         guestId: guests.id,
-        guestName: guests.name,
+        guestName: sql`${guests.firstName} || ' ' || ${guests.lastName}`,
         email: guests.email,
         phone: guests.phone,
         needsFlightAssistance: travelInfo.needsFlightAssistance,
         accommodationPreference: guests.accommodationPreference,
         dietaryRestrictions: guests.dietaryRestrictions,
-        specialRequests: guests.specialRequests,
-        travelMode: guests.travelMode,
+        specialRequirements: travelInfo.specialRequirements,
+        travelMode: travelInfo.travelMode,
         arrivalDate: travelInfo.arrivalDate,
         departureDate: travelInfo.departureDate,
         flightInfo: travelInfo

@@ -246,6 +246,7 @@ export const travelInfo = pgTable("travel_info", {
   gate: text("gate"), // Gate information
   flightStatus: text("flight_status").default("scheduled"), // scheduled, confirmed, delayed, cancelled
   needsTransportation: boolean("needs_transportation").default(false),
+  needsFlightAssistance: boolean("needs_flight_assistance").default(false),
   transportationType: text("transportation_type"), // pickup, drop, both
   specialRequirements: text("special_requirements"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
