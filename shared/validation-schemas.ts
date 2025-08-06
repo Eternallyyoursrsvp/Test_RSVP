@@ -41,12 +41,17 @@ export const addressSchema = z.object({
 // ===== Event Information =====
 
 /**
- * Date Range Schema
+ * Base Date Range Schema (without refinement for shape access)
  */
-export const dateRangeSchema = z.object({
+const baseDateRangeSchema = z.object({
   startDate: z.string().min(1, "Start date is required"),
   endDate: z.string().min(1, "End date is required"),
-}).refine(data => {
+});
+
+/**
+ * Date Range Schema (with validation)
+ */
+export const dateRangeSchema = baseDateRangeSchema.refine(data => {
   const start = new Date(data.startDate);
   const end = new Date(data.endDate);
   return end >= start;
@@ -236,7 +241,7 @@ export const eventBasicInfoSchema = z.object({
   coupleNames: z.string().min(1, "Couple names are required").max(100, "Couple names are too long"),
   brideName: z.string().min(1, "Bride name is required").max(100, "Bride name is too long"),
   groomName: z.string().min(1, "Groom name is required").max(100, "Groom name is too long"),
-  ...dateRangeSchema.shape,
+  ...baseDateRangeSchema.shape,
   location: z.string().min(1, "Location is required").max(200, "Location is too long"),
   description: z.string().max(500, "Description is too long").optional(),
 });
