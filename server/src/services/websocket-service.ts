@@ -10,7 +10,7 @@
  * - Real-time notifications and updates
  */
 
-import WebSocket from 'ws';
+import WebSocket, { WebSocketServer } from 'ws';
 import { EventEmitter } from 'events';
 import { Server as HTTPServer } from 'http';
 import { IncomingMessage } from 'http';
@@ -107,7 +107,7 @@ export interface WSStats {
 }
 
 export class EnhancedWebSocketService extends EventEmitter {
-  private wss: WebSocket.Server | null = null;
+  private wss: WebSocketServer | null = null;
   private clients = new Map<string, WSClient>();
   private rooms = new Map<string, WSRoom>();
   private config: WebSocketConfig;
@@ -162,7 +162,7 @@ export class EnhancedWebSocketService extends EventEmitter {
 
     try {
       // Create WebSocket server
-      this.wss = new WebSocket.Server({
+      this.wss = new WebSocketServer({
         server: this.httpServer,
         path: this.config.path,
         perMessageDeflate: this.config.enableCompression,
@@ -233,11 +233,11 @@ export class EnhancedWebSocketService extends EventEmitter {
   private setupEventHandlers(): void {
     if (!this.wss) return;
 
-    this.wss.on('connection', (socket, request) => {
+    this.wss.on('connection', (socket: WebSocket, request: IncomingMessage) => {
       this.handleConnection(socket, request);
     });
 
-    this.wss.on('error', (error) => {
+    this.wss.on('error', (error: Error) => {
       console.error('WebSocket server error:', error);
       this.emit('error', error);
     });
