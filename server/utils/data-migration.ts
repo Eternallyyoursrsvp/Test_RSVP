@@ -225,7 +225,7 @@ export class EncryptionMigrationService {
       }
       
       // Get total record count
-      const countResult = await this.db.execute(`SELECT COUNT(*) as count FROM ${tableName}`);
+      const countResult = await this.db.query(`SELECT COUNT(*) as count FROM ${tableName}`);
       progress.totalRecords = parseInt(countResult[0]?.count || '0');
       
       if (progress.totalRecords === 0) {
@@ -318,7 +318,7 @@ export class EncryptionMigrationService {
     progress: MigrationProgress
   ): Promise<void> {
     // Fetch batch of records
-    const records = await this.db.execute(
+    const records = await this.db.query(
       `SELECT * FROM ${tableName} LIMIT ${batchSize} OFFSET ${offset}`
     );
     
@@ -378,7 +378,7 @@ export class EncryptionMigrationService {
           
           if (setClause) {
             const values = [recordId, ...fieldNames.map(field => encryptedRecord[field])];
-            await this.db.execute(
+            await this.db.query(
               `UPDATE ${tableName} SET ${setClause} WHERE id = $1`,
               values
             );
@@ -423,7 +423,7 @@ export class EncryptionMigrationService {
     
     try {
       // Sample validation - check first 10 records
-      const sampleRecords = await this.db.execute(
+      const sampleRecords = await this.db.query(
         `SELECT * FROM ${tableName} LIMIT 10`
       );
       
@@ -488,7 +488,7 @@ export class EncryptionMigrationService {
         const setClause = fieldNames.map((field, index) => `${field} = $${index + 2}`).join(', ');
         const values = [backup.recordId, ...fieldNames.map(field => originalRecord[field])];
         
-        await this.db.execute(
+        await this.db.query(
           `UPDATE ${tableName} SET ${setClause} WHERE id = $1`,
           values
         );

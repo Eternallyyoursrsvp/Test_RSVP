@@ -8,7 +8,7 @@ import {
   guestMealSelections, coupleMessages, relationshipTypes,
   whatsappTemplates, rsvpFollowupTemplates, rsvpFollowupLogs,
   hotels, globalRoomTypes, transportGroups, transportAllocations,
-  type User, type WeddingEvent, type Guest,
+  type User as SchemaUser, type WeddingEvent, type Guest,
   type Ceremony, type GuestCeremony, type TravelInfo, type Accommodation,
   type RoomAllocation, type MealOption, type GuestMealSelection,
   type CoupleMessage, type RelationshipType, type WhatsappTemplate,
@@ -47,12 +47,12 @@ interface EmailConfig {
 // Complete storage interface
 export interface IStorage {
   // User operations
-  getUser(id: number): Promise<User | undefined>;
-  getAllUsers(): Promise<User[]>;
-  getUserByUsername(username: string): Promise<User | undefined>;
-  getUserByEmail(email: string): Promise<User | undefined>;
-  createUser(user: InsertUser): Promise<User>;
-  updateUser(userId: number, userData: Partial<InsertUser>): Promise<User | undefined>;
+  getUser(id: number): Promise<SchemaUser | undefined>;
+  getAllUsers(): Promise<SchemaUser[]>;
+  getUserByUsername(username: string): Promise<SchemaUser | undefined>;
+  getUserByEmail(email: string): Promise<SchemaUser | undefined>;
+  createUser(user: InsertUser): Promise<SchemaUser>;
+  updateUser(userId: number, userData: Partial<InsertUser>): Promise<SchemaUser | undefined>;
   updateUserPassword(userId: number, hashedPassword: string): Promise<void>;
   deleteUser(userId: number): Promise<boolean>;
 
@@ -223,7 +223,7 @@ export class DatabaseStorage implements IStorage {
   // These methods now use DatabaseAuthAdapter for multi-provider support
   // while maintaining backward compatibility with existing API contracts
 
-  async getUser(id: number): Promise<User | undefined> {
+  async getUser(id: number): Promise<SchemaUser | undefined> {
     try {
       // Use multi-provider auth adapter - NO FALLBACKS
       const authAdapter = await this.getAuthAdapter();
@@ -238,7 +238,7 @@ export class DatabaseStorage implements IStorage {
     }
   }
 
-  async getAllUsers(): Promise<User[]> {
+  async getAllUsers(): Promise<SchemaUser[]> {
     try {
       // Use multi-provider auth adapter - NO FALLBACKS
       const authAdapter = await this.getAuthAdapter();
@@ -252,7 +252,7 @@ export class DatabaseStorage implements IStorage {
     }
   }
 
-  async getUserByUsername(username: string): Promise<User | undefined> {
+  async getUserByUsername(username: string): Promise<SchemaUser | undefined> {
     try {
       // Use multi-provider auth adapter - NO FALLBACKS
       const authAdapter = await this.getAuthAdapter();
@@ -267,7 +267,7 @@ export class DatabaseStorage implements IStorage {
     }
   }
 
-  async getUserByEmail(email: string): Promise<User | undefined> {
+  async getUserByEmail(email: string): Promise<SchemaUser | undefined> {
     try {
       // Note: DatabaseAuthAdapter doesn't have getUserByEmail yet, using legacy approach
       const result = await db.select().from(users).where(eq(users.email, email));
@@ -278,7 +278,7 @@ export class DatabaseStorage implements IStorage {
     }
   }
 
-  async createUser(user: InsertUser): Promise<User> {
+  async createUser(user: InsertUser): Promise<SchemaUser> {
     try {
       // Convert InsertUser to CreateUserData format for auth adapter
       const createUserData: CreateUserData = {
@@ -306,13 +306,13 @@ export class DatabaseStorage implements IStorage {
     }
   }
 
-  async updateUser(userId: number, userData: Partial<InsertUser>): Promise<User | undefined> {
+  async updateUser(userId: number, userData: Partial<InsertUser>): Promise<SchemaUser | undefined> {
     try {
       // Use multi-provider auth adapter for user updates - NO FALLBACKS
       const authAdapter = await this.getAuthAdapter();
       
       // Convert InsertUser data to User data format, handling nullable fields
-      const updateData: Partial<User> = {
+      const updateData: Partial<AuthUser> = {
         ...userData,
         passwordChangeRequired: userData.passwordChangeRequired ?? false,
         updatedAt: new Date()
@@ -355,7 +355,7 @@ export class DatabaseStorage implements IStorage {
    * Convert AuthUser (from DatabaseAuthAdapter) to schema User format
    * Maintains backward compatibility with existing code
    */
-  private convertAuthUserToSchemaUser(authUser: AuthUser): User {
+  private convertAuthUserToSchemaUser(authUser: AuthUser): SchemaUser {
     return {
       id: authUser.id,
       username: authUser.username,
