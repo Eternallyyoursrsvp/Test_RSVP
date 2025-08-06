@@ -348,7 +348,7 @@ const DataTable = <T extends object>({
           </TableHeader>
           
           {virtualized ? (
-            <VirtualizedTableBody
+            <VirtualizedTableBody<T>
               data={paginatedData}
               columns={columns}
               keyField={keyField}
@@ -361,7 +361,7 @@ const DataTable = <T extends object>({
             <TableBody>
               {paginatedData.length > 0 ? (
                 paginatedData.map((row) => (
-                  <MemoizedTableRow
+                  <MemoizedTableRow<T>
                     key={String(row[keyField])}
                     row={row}
                     columns={columns}

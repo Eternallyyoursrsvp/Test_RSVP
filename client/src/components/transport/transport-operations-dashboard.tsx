@@ -708,7 +708,7 @@ export default function TransportOperationsDashboard({ eventId }: TransportOpera
                 </div>
                 <div className="text-center">
                   <div className="text-2xl font-bold text-orange-600">
-                    {transportData?.drivers?.filter(d => d.status === 'available').length || 0}
+                    {transportData?.drivers?.filter((d: DriverStatus) => d.status === 'available').length || 0}
                   </div>
                   <div className="text-sm text-gray-600">Available Drivers</div>
                   <div className="text-xs text-gray-500">Ready for dispatch</div>
@@ -860,7 +860,7 @@ export default function TransportOperationsDashboard({ eventId }: TransportOpera
                 <CardContent>
                   <div className="space-y-3">
                     {['available', 'en-route', 'loading', 'completed', 'offline'].map(status => {
-                      const count = drivers.filter(d => d.status === status).length;
+                      const count = drivers.filter((d: DriverStatus) => d.status === status).length;
                       const percentage = drivers.length > 0 ? (count / drivers.length) * 100 : 0;
                       const color = status === 'available' ? 'green' : 
                                   status === 'en-route' ? 'blue' :
@@ -917,7 +917,7 @@ export default function TransportOperationsDashboard({ eventId }: TransportOpera
                     </div>
                     <div className="text-center p-3 border rounded-lg">
                       <div className="text-2xl font-bold text-purple-600">
-                        {groups.reduce((total, group) => total + group.assigned, 0)}
+                        {groups.reduce((total: number, group: TransportGroup) => total + group.assigned, 0)}
                       </div>
                       <div className="text-sm text-gray-600">Total Passengers</div>
                       <div className="text-xs text-gray-500">Being transported</div>
