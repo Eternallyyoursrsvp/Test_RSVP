@@ -70,7 +70,7 @@ interface CommunicationStepProps {
 }
 
 // Enhanced screen navigation with inheritance view
-type CommunicationScreen = 'overview' | 'providers' | 'templates' | 'assets' | 'testing';
+type CommunicationScreen = 'overview' | 'providers' | 'templates' | 'assets' | 'testing' | 'signatures';
 
 // Enhanced provider interfaces for unified system
 interface UnifiedProviderStatus {
@@ -95,6 +95,33 @@ interface InheritanceInfo {
   resolved: UnifiedProviderStatus[];
 }
 
+interface ProviderStatus {
+  id: string;
+  name: string;
+  type: 'email' | 'sms' | 'whatsapp';
+  icon: React.ReactNode;
+  connected: boolean;
+  description: string;
+  color: string;
+}
+
+interface BrandAsset {
+  id: string;
+  name: string;
+  type: string;
+  url?: string;
+}
+
+interface Template {
+  id: string;
+  name: string;
+  content?: string;
+  subject?: string;
+  type?: string;
+  channel?: string;
+  [key: string]: any;
+}
+
 interface TemplateInheritance {
   platformTemplates: any[];
   tenantTemplates: any[];
@@ -102,17 +129,16 @@ interface TemplateInheritance {
   resolved: any;
 }
 
-
-
 // Template category interface with RSVP flow sequencing
 interface TemplateCategory {
   id: string;
+  categoryId?: string;
   name: string;
-  description: string;
-  sequence: number; // Sequential order in RSVP flow
-  icon: React.ReactNode;
-  color: string;
-  templates: TemplateVariant[];
+  description?: string;
+  sequence?: number;
+  icon?: React.ReactNode;
+  color?: string;
+  templates: Template[];
 }
 
 interface TemplateVariant {
@@ -509,7 +535,7 @@ export default function CommunicationStep({
 
 
   // Transform database templates into accordion format
-  const formatTemplatesForAccordion = (rawTemplates: any) => {
+  const formatTemplatesForAccordion = (rawTemplates: Record<string, any>) => {
     if (!rawTemplates) return [];
 
     const categoryMeta = {
@@ -595,7 +621,7 @@ export default function CommunicationStep({
           icon: <FileText className="h-4 w-4" />,
           color: 'border-l-gray-500 hover:bg-card/80'
         }),
-        templates: Array.isArray(templates) ? templates.map((template: any) => ({
+        templates: Array.isArray(templates) ? templates.map((template: Template) => ({
           id: template.id,
           channel: template.channel,
           subject: template.subject,
@@ -682,7 +708,7 @@ export default function CommunicationStep({
   const formattedTemplateCategories = formatTemplatesForAccordion(legacyTemplatesData);
   
   // Helper function to process unified templates data with inheritance information
-  const processTemplatesData = (rawData: any) => {
+  const processTemplatesData = (rawData: Record<string, any>) => {
     if (!rawData) return [];
     
     const categoryMeta = {
@@ -768,7 +794,7 @@ export default function CommunicationStep({
           icon: <FileText className="h-4 w-4" />,
           color: 'border-l-gray-500 hover:bg-card/80'
         }),
-        templates: Array.isArray(templates) ? templates.map((template: any) => ({
+        templates: Array.isArray(templates) ? templates.map((template: Template) => ({
           id: template.id,
           channel: template.channel,
           subject: template.subject,
@@ -895,7 +921,7 @@ export default function CommunicationStep({
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-3">
-            {emailProviders.map((provider) => (
+            {emailProviders.map((provider: ProviderStatus) => (
               <div key={provider.id} className="flex items-center justify-between p-4 rounded-lg border hover:bg-gray-50 transition-colors">
                 <div className="flex items-center gap-3">
                   <div className={provider.color}>
@@ -963,7 +989,7 @@ export default function CommunicationStep({
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-3">
-            {smsProviders.map((provider) => (
+            {smsProviders.map((provider: ProviderStatus) => (
               <div key={provider.id} className="flex items-center justify-between p-4 rounded-lg border hover:bg-gray-50 transition-colors">
                 <div className="flex items-center gap-3">
                   <div className={provider.color}>
@@ -1031,7 +1057,7 @@ export default function CommunicationStep({
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-3">
-            {whatsappProviders.map((provider) => (
+            {whatsappProviders.map((provider: ProviderStatus) => (
               <div key={provider.id} className="flex items-center justify-between p-4 rounded-lg border hover:bg-gray-50 transition-colors">
                 <div className="flex items-center gap-3">
                   <div className={provider.color}>
@@ -1377,7 +1403,7 @@ export default function CommunicationStep({
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {brandAssetsData.map((asset: any) => (
+                {brandAssetsData.map((asset: BrandAsset) => (
                   <div key={asset.id} className="border rounded-lg p-4 text-center">
                     <p className="font-medium">{asset.name}</p>
                     <p className="text-sm text-muted-foreground">{asset.type}</p>
@@ -1393,7 +1419,7 @@ export default function CommunicationStep({
 
   // Helper function to render templates screen  
   function renderTemplatesScreen() {
-    if (templatesLoading) {
+    if (legacyTemplatesLoading) {
       return (
         <div className="space-y-6">
           <div className="text-center py-8">
@@ -1404,20 +1430,20 @@ export default function CommunicationStep({
       );
     }
 
-    if (templatesError) {
+    if (legacyTemplatesError) {
       return (
         <div className="space-y-6">
           <Card>
             <CardHeader>
               <CardTitle className="text-destructive">Error Loading Templates</CardTitle>
-              <CardDescription>{templatesError.message}</CardDescription>
+              <CardDescription>{legacyTemplatesError.message}</CardDescription>
             </CardHeader>
           </Card>
         </div>
       );
     }
 
-    const categories = processTemplatesData(templatesData || {});
+    const categories = processTemplatesData(unifiedTemplatesData || {});
 
     return (
       <div className="space-y-6">
@@ -1449,7 +1475,7 @@ export default function CommunicationStep({
 
         {/* Template Categories Accordion */}
         <div className="space-y-4">
-          {categories.map((category) => (
+          {categories.map((category: TemplateCategory) => (
             <Card key={category.id} className={`transition-all duration-200 ${category.color}`}>
               <Collapsible
                 open={expandedCategories.includes(category.id)}
@@ -1505,7 +1531,7 @@ export default function CommunicationStep({
                             </CardHeader>
                             <CardContent className="pt-0 space-y-2">
                               {channelTemplates.length > 0 ? (
-                                channelTemplates.map((template) => (
+                                channelTemplates.map((template: Template) => (
                                   <div key={template.id} className="flex items-center justify-between p-2 rounded border bg-background/50">
                                     <div className="flex-1 min-w-0">
                                       <p className="text-xs font-medium truncate">
@@ -1847,17 +1873,17 @@ export default function CommunicationStep({
 
       {/* Sequential Template Accordion Categories */}
       <div className="space-y-4">
-        {templatesLoading ? (
+        {legacyTemplatesLoading ? (
           <div className="text-center py-8">
             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-purple-600 mx-auto"></div>
             <p className="text-muted-foreground mt-2">Loading templates...</p>
           </div>
-        ) : templatesError ? (
+        ) : legacyTemplatesError ? (
           <div className="text-center py-8">
             <p className="text-red-600">Error loading templates. Please try again.</p>
           </div>
         ) : (
-          formatTemplatesForAccordion(templatesData).map((category) => {
+          formatTemplatesForAccordion(templatesData).map((category: TemplateCategory) => {
           const isExpanded = expandedCategories.includes(category.id);
           const toggleCategory = () => {
             setExpandedCategories(prev => 
@@ -2159,7 +2185,7 @@ export default function CommunicationStep({
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-3">
-            {emailProviders.map((provider) => (
+            {emailProviders.map((provider: ProviderStatus) => (
               <div key={provider.id} className="flex items-center justify-between p-4 rounded-lg border hover:bg-gray-50 transition-colors">
                 <div className="flex items-center gap-3">
                   <div className={provider.color}>
@@ -2227,7 +2253,7 @@ export default function CommunicationStep({
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-3">
-            {smsProviders.map((provider) => (
+            {smsProviders.map((provider: ProviderStatus) => (
               <div key={provider.id} className="flex items-center justify-between p-4 rounded-lg border hover:bg-gray-50 transition-colors">
                 <div className="flex items-center gap-3">
                   <div className={provider.color}>
@@ -2295,28 +2321,5 @@ export default function CommunicationStep({
     );
   }
 
-  function renderTemplatesScreen() {
-    // Return the existing templates screen content
-    return (
-      <div className="space-y-6">
-        {/* Template content - returning existing templates screen */}
-      </div>
-    );
-  }
 
-  function renderAssetsScreen() {
-    return (
-      <div className="space-y-6">
-        {/* Assets screen content */}
-      </div>
-    );
-  }
-
-  function renderSignaturesScreen() {
-    return (
-      <div className="space-y-6">
-        {/* Signatures screen content */}
-      </div>
-    );
-  }
 }
