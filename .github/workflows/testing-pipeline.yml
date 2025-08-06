@@ -1,0 +1,522 @@
+name: Comprehensive Testing Pipeline
+
+on:
+  push:
+    branches: [ main, develop, ver4-complete-implementation ]
+  pull_request:
+    branches: [ main, develop ]
+  schedule:
+    # Run full test suite daily at 2 AM UTC
+    - cron: '0 2 * * *'
+
+env:
+  NODE_VERSION: '18'
+  POSTGRES_VERSION: '15'
+  
+jobs:
+  # Lint and type checking
+  quality-checks:
+    name: Quality Checks
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          
+      - name: Install dependencies
+        run: npm ci
+        
+      - name: Run ESLint
+        run: npm run lint
+        
+      - name: Run TypeScript check
+        run: npm run check
+        
+      - name: Check code formatting
+        run: npm run format:check
+
+  # Unit and integration tests
+  unit-integration-tests:
+    name: Unit & Integration Tests
+    runs-on: ubuntu-latest
+    
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_PASSWORD: test_password
+          POSTGRES_USER: test_user
+          POSTGRES_DB: test_wedding_platform
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+          
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          
+      - name: Install dependencies
+        run: npm ci
+        
+      - name: Setup test database
+        run: |
+          npm run db:migrate
+          npm run db:seed:test
+        env:
+          DATABASE_URL: postgresql://test_user:test_password@localhost:5432/test_wedding_platform
+          
+      - name: Run unit tests
+        run: npm run test:unit
+        env:
+          DATABASE_URL: postgresql://test_user:test_password@localhost:5432/test_wedding_platform
+          NODE_ENV: test
+          
+      - name: Run integration tests
+        run: npm run test:integration
+        env:
+          DATABASE_URL: postgresql://test_user:test_password@localhost:5432/test_wedding_platform
+          NODE_ENV: test
+          
+      - name: Upload coverage reports
+        uses: codecov/codecov-action@v3
+        with:
+          file: ./coverage/lcov.info
+          flags: unit-integration
+          name: unit-integration-coverage
+
+  # End-to-end tests
+  e2e-tests:
+    name: E2E Tests
+    runs-on: ubuntu-latest
+    
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_PASSWORD: test_password
+          POSTGRES_USER: test_user
+          POSTGRES_DB: test_wedding_platform
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+          
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          
+      - name: Install dependencies
+        run: npm ci
+        
+      - name: Install Playwright browsers
+        run: npm run playwright:install-deps && npm run playwright:install
+        
+      - name: Setup test database
+        run: |
+          npm run db:migrate
+          npm run db:seed:test
+        env:
+          DATABASE_URL: postgresql://test_user:test_password@localhost:5432/test_wedding_platform
+          
+      - name: Build application
+        run: npm run build
+        env:
+          DATABASE_URL: postgresql://test_user:test_password@localhost:5432/test_wedding_platform
+          
+      - name: Start application server
+        run: npm start &
+        env:
+          DATABASE_URL: postgresql://test_user:test_password@localhost:5432/test_wedding_platform
+          NODE_ENV: test
+          PORT: 5000
+          
+      - name: Wait for server to be ready
+        run: npx wait-on http://localhost:5000/api/health --timeout 60000
+        
+      - name: Run E2E tests
+        run: npm run test:e2e
+        env:
+          BASE_URL: http://localhost:5000
+          
+      - name: Upload E2E test results
+        uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: playwright-report
+          path: test-results/
+          
+      - name: Upload E2E screenshots
+        uses: actions/upload-artifact@v3
+        if: failure()
+        with:
+          name: playwright-screenshots
+          path: test-results/screenshots/
+
+  # Performance tests
+  performance-tests:
+    name: Performance Tests
+    runs-on: ubuntu-latest
+    if: github.event_name == 'schedule' || contains(github.event.pull_request.labels.*.name, 'performance')
+    
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_PASSWORD: test_password
+          POSTGRES_USER: test_user
+          POSTGRES_DB: test_wedding_platform
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+          
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          
+      - name: Install dependencies
+        run: npm ci
+        
+      - name: Setup test database
+        run: |
+          npm run db:migrate
+          npm run db:seed:performance
+        env:
+          DATABASE_URL: postgresql://test_user:test_password@localhost:5432/test_wedding_platform
+          
+      - name: Build application
+        run: npm run build
+        env:
+          DATABASE_URL: postgresql://test_user:test_password@localhost:5432/test_wedding_platform
+          
+      - name: Start application server
+        run: npm start &
+        env:
+          DATABASE_URL: postgresql://test_user:test_password@localhost:5432/test_wedding_platform
+          NODE_ENV: production
+          PORT: 5000
+          
+      - name: Wait for server to be ready
+        run: npx wait-on http://localhost:5000/api/health --timeout 60000
+        
+      - name: Install k6
+        run: |
+          sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys C5AD17C747E3415A3642D57D77C6C491D6AC1D69
+          echo "deb https://dl.k6.io/deb stable main" | sudo tee /etc/apt/sources.list.d/k6.list
+          sudo apt-get update
+          sudo apt-get install k6
+          
+      - name: Run performance tests
+        run: npm run test:performance
+        env:
+          BASE_URL: http://localhost:5000
+          
+      - name: Upload performance results
+        uses: actions/upload-artifact@v3
+        with:
+          name: performance-results
+          path: performance-results/
+
+  # Security tests
+  security-tests:
+    name: Security Tests
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          
+      - name: Install dependencies
+        run: npm ci
+        
+      - name: Run npm audit
+        run: npm audit --audit-level moderate
+        
+      - name: Run Snyk security scan
+        uses: snyk/actions/node@master
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        with:
+          args: --severity-threshold=medium
+          
+      - name: Run CodeQL analysis
+        uses: github/codeql-action/init@v2
+        with:
+          languages: javascript, typescript
+          
+      - name: Perform CodeQL analysis
+        uses: github/codeql-action/analyze@v2
+
+  # Accessibility tests
+  accessibility-tests:
+    name: Accessibility Tests
+    runs-on: ubuntu-latest
+    
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_PASSWORD: test_password
+          POSTGRES_USER: test_user
+          POSTGRES_DB: test_wedding_platform
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+          
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          
+      - name: Install dependencies
+        run: npm ci
+        
+      - name: Install Playwright browsers
+        run: npm run playwright:install
+        
+      - name: Setup test database
+        run: |
+          npm run db:migrate
+          npm run db:seed:test
+        env:
+          DATABASE_URL: postgresql://test_user:test_password@localhost:5432/test_wedding_platform
+          
+      - name: Build application
+        run: npm run build
+        env:
+          DATABASE_URL: postgresql://test_user:test_password@localhost:5432/test_wedding_platform
+          
+      - name: Start application server
+        run: npm start &
+        env:
+          DATABASE_URL: postgresql://test_user:test_password@localhost:5432/test_wedding_platform
+          NODE_ENV: test
+          PORT: 5000
+          
+      - name: Wait for server to be ready
+        run: npx wait-on http://localhost:5000/api/health --timeout 60000
+        
+      - name: Run accessibility tests
+        run: npm run test:accessibility
+        env:
+          BASE_URL: http://localhost:5000
+          
+      - name: Upload accessibility results
+        uses: actions/upload-artifact@v3
+        with:
+          name: accessibility-results
+          path: accessibility-results/
+
+  # Mobile responsiveness tests
+  mobile-tests:
+    name: Mobile Responsiveness Tests
+    runs-on: ubuntu-latest
+    
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_PASSWORD: test_password
+          POSTGRES_USER: test_user
+          POSTGRES_DB: test_wedding_platform
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+          
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          
+      - name: Install dependencies
+        run: npm ci
+        
+      - name: Install Playwright browsers
+        run: npm run playwright:install
+        
+      - name: Setup test database
+        run: |
+          npm run db:migrate
+          npm run db:seed:test
+        env:
+          DATABASE_URL: postgresql://test_user:test_password@localhost:5432/test_wedding_platform
+          
+      - name: Build application
+        run: npm run build
+        env:
+          DATABASE_URL: postgresql://test_user:test_password@localhost:5432/test_wedding_platform
+          
+      - name: Start application server
+        run: npm start &
+        env:
+          DATABASE_URL: postgresql://test_user:test_password@localhost:5432/test_wedding_platform
+          NODE_ENV: test
+          PORT: 5000
+          
+      - name: Wait for server to be ready
+        run: npx wait-on http://localhost:5000/api/health --timeout 60000
+        
+      - name: Run mobile tests
+        run: npm run test:e2e -- --project="Mobile Chrome" --project="Mobile Safari"
+        env:
+          BASE_URL: http://localhost:5000
+          
+      - name: Upload mobile test results
+        uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: mobile-test-results
+          path: test-results/
+
+  # Test results aggregation
+  test-results:
+    name: Aggregate Test Results
+    runs-on: ubuntu-latest
+    needs: [quality-checks, unit-integration-tests, e2e-tests]
+    if: always()
+    
+    steps:
+      - name: Download all test artifacts
+        uses: actions/download-artifact@v3
+        
+      - name: Generate test summary
+        run: |
+          echo "## Test Results Summary" >> $GITHUB_STEP_SUMMARY
+          echo "| Test Type | Status |" >> $GITHUB_STEP_SUMMARY
+          echo "|-----------|--------|" >> $GITHUB_STEP_SUMMARY
+          echo "| Quality Checks | ${{ needs.quality-checks.result }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Unit & Integration | ${{ needs.unit-integration-tests.result }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| End-to-End | ${{ needs.e2e-tests.result }} |" >> $GITHUB_STEP_SUMMARY
+          
+      - name: Comment on PR
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const { data: comments } = await github.rest.issues.listComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+            });
+            
+            const botComment = comments.find(comment => 
+              comment.user.type === 'Bot' && comment.body.includes('Test Results')
+            );
+            
+            const body = `## 🧪 Test Results
+            
+            | Test Type | Status |
+            |-----------|--------|
+            | Quality Checks | ${{ needs.quality-checks.result == 'success' && '✅ Passed' || '❌ Failed' }} |
+            | Unit & Integration | ${{ needs.unit-integration-tests.result == 'success' && '✅ Passed' || '❌ Failed' }} |
+            | End-to-End | ${{ needs.e2e-tests.result == 'success' && '✅ Passed' || '❌ Failed' }} |
+            
+            **Overall Status**: ${{ (needs.quality-checks.result == 'success' && needs.unit-integration-tests.result == 'success' && needs.e2e-tests.result == 'success') && '✅ All tests passed' || '❌ Some tests failed' }}
+            
+            _Last updated: ${new Date().toISOString()}_`;
+            
+            if (botComment) {
+              await github.rest.issues.updateComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: botComment.id,
+                body: body
+              });
+            } else {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+                body: body
+              });
+            }
+
+  # Deployment readiness check
+  deployment-readiness:
+    name: Deployment Readiness Check
+    runs-on: ubuntu-latest
+    needs: [quality-checks, unit-integration-tests, e2e-tests, security-tests]
+    if: github.ref == 'refs/heads/main' && needs.quality-checks.result == 'success' && needs.unit-integration-tests.result == 'success' && needs.e2e-tests.result == 'success' && needs.security-tests.result == 'success'
+    
+    steps:
+      - name: Deployment readiness confirmed
+        run: |
+          echo "✅ All quality gates passed - Ready for deployment"
+          echo "deployment_ready=true" >> $GITHUB_OUTPUT
+          
+    outputs:
+      deployment_ready: ${{ steps.deployment-readiness.outputs.deployment_ready }}
+
+  # Notification
+  notify-results:
+    name: Notify Test Results
+    runs-on: ubuntu-latest
+    needs: [test-results]
+    if: always() && (github.event_name == 'schedule' || github.ref == 'refs/heads/main')
+    
+    steps:
+      - name: Notify Slack on failure
+        if: failure()
+        uses: 8398a7/action-slack@v3
+        with:
+          status: failure
+          text: "🚨 Wedding RSVP Platform tests failed on main branch"
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}

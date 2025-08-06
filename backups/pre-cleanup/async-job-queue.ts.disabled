@@ -1,0 +1,297 @@
+/**
+ * ASYNC JOB QUEUE SYSTEM WITH COMPREHENSIVE LOGGING
+ * 
+ * Implements background job processing for heavy operations
+ * with detailed performance monitoring and tracing.
+ */
+
+import { createLogger } from './logger';
+
+interface Job {
+  id: string;
+  type: string;
+  data: any;
+  priority: number;
+  createdAt: Date;
+  attempts: number;
+  maxAttempts: number;
+  status: 'pending' | 'processing' | 'completed' | 'failed';
+}
+
+class AsyncJobQueue {
+  private jobs = new Map<string, Job>();
+  private processing = new Set<string>();
+  private workers = new Map<string, (job: Job) => Promise<void>>();
+  private isProcessing = false;
+  private logger = createLogger(undefined, 'job-queue');
+  private processingInterval: NodeJS.Timeout | null = null;
+
+  constructor() {
+    // Start processing jobs
+    this.startProcessing();
+    
+    this.logger.logBusinessEvent('job_queue_initialized', {
+      timestamp: new Date().toISOString()
+    });
+    
+    // Cleanup on process exit
+    process.on('SIGTERM', () => this.cleanup());
+    process.on('SIGINT', () => this.cleanup());
+  }
+
+  /**
+   * Cleanup resources and stop processing
+   */
+  cleanup() {
+    if (this.processingInterval) {
+      clearInterval(this.processingInterval);
+      this.processingInterval = null;
+    }
+    this.isProcessing = false;
+  }
+
+  /**
+   * Add a job to the queue with logging
+   */
+  addJob(type: string, data: any, priority: number = 0): string {
+    const jobId = `${type}_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    
+    const job: Job = {
+      id: jobId,
+      type,
+      data,
+      priority,
+      createdAt: new Date(),
+      attempts: 0,
+      maxAttempts: 3,
+      status: 'pending'
+    };
+    
+    this.jobs.set(jobId, job);
+    
+    // Log job creation
+    this.logger.logJob(type, 'started');
+    this.logger.logBusinessEvent('job_queued', {
+      jobId,
+      jobType: type,
+      priority,
+      queueSize: this.jobs.size,
+      dataSize: JSON.stringify(data).length
+    });
+    
+    return jobId;
+  }
+
+  /**
+   * Register a worker for a job type
+   */
+  registerWorker(type: string, worker: (job: Job) => Promise<void>) {
+    this.workers.set(type, worker);
+    this.logger.logBusinessEvent('worker_registered', { type });
+  }
+
+  /**
+   * Get job status
+   */
+  getJobStatus(jobId: string): Job | null {
+    return this.jobs.get(jobId) || null;
+  }
+
+  /**
+   * Start processing jobs continuously
+   */
+  private async startProcessing() {
+    if (this.isProcessing) return;
+    this.isProcessing = true;
+
+    // Use interval-based processing to prevent blocking
+    const processJobs = () => {
+      const nextJob = this.getNextJob();
+      
+      if (nextJob) {
+        this.processJob(nextJob).catch(error => {
+          this.logger.logError(error as Error, { context: 'job_processing' });
+        });
+      }
+    };
+
+    // Check for jobs every 2 seconds without blocking
+    this.processingInterval = setInterval(processJobs, 2000);
+    
+    // Also check immediately for any pending jobs
+    setImmediate(processJobs);
+  }
+
+  /**
+   * Get the next job to process (highest priority first)
+   */
+  private getNextJob(): Job | null {
+    const pendingJobs = Array.from(this.jobs.values())
+      .filter(job => job.status === 'pending' && !this.processing.has(job.id))
+      .sort((a, b) => b.priority - a.priority);
+    
+    return pendingJobs[0] || null;
+  }
+
+  /**
+   * Process a single job
+   */
+  private async processJob(job: Job): Promise<void> {
+    const worker = this.workers.get(job.type);
+    if (!worker) {
+      console.error(`❌ No worker found for job type: ${job.type}`);
+      job.status = 'failed';
+      return;
+    }
+
+    this.processing.add(job.id);
+    job.status = 'processing';
+    job.attempts++;
+
+    const startTime = Date.now();
+
+    try {
+      console.log(`🔄 Processing job: ${job.type} (${job.id})`);
+      await worker(job);
+      
+      job.status = 'completed';
+      const executionTime = Date.now() - startTime;
+      console.log(`✅ Job completed: ${job.type} in ${executionTime}ms`);
+      
+      // Log successful completion
+      this.logger.logJob(job.type, 'completed', executionTime);
+      this.logger.logPerformance(`job_execution_${job.type}`, executionTime);
+      
+    } catch (error) {
+      console.error(`❌ Job failed: ${job.type} (${job.id})`, error);
+      
+      if (job.attempts >= job.maxAttempts) {
+        job.status = 'failed';
+        console.error(`💀 Job permanently failed: ${job.type} (${job.id})`);
+        
+        // Log permanent failure
+        this.logger.logJob(job.type, 'failed', Date.now() - startTime, error);
+        this.logger.logBusinessEvent('job_permanent_failure', {
+          jobId: job.id,
+          jobType: job.type,
+          totalAttempts: job.attempts,
+          error: error instanceof Error ? error.message : String(error)
+        });
+      } else {
+        job.status = 'pending';
+        console.log(`🔄 Job retrying: ${job.type} (attempt ${job.attempts}/${job.maxAttempts})`);
+        
+        // Log retry attempt
+        this.logger.logBusinessEvent('job_retry', {
+          jobId: job.id,
+          jobType: job.type,
+          attempt: job.attempts,
+          maxAttempts: job.maxAttempts
+        });
+      }
+    } finally {
+      this.processing.delete(job.id);
+    }
+  }
+
+  /**
+   * Get queue statistics
+   */
+  getQueueStats() {
+    const jobs = Array.from(this.jobs.values());
+    return {
+      total: jobs.length,
+      pending: jobs.filter(j => j.status === 'pending').length,
+      processing: jobs.filter(j => j.status === 'processing').length,
+      completed: jobs.filter(j => j.status === 'completed').length,
+      failed: jobs.filter(j => j.status === 'failed').length,
+      activeWorkers: this.workers.size
+    };
+  }
+}
+
+// Singleton instance
+export const jobQueue = new AsyncJobQueue();
+
+/**
+ * PREDEFINED JOB WORKERS
+ */
+
+// Email sending job worker
+jobQueue.registerWorker('send-bulk-emails', async (job: Job) => {
+  const { recipients, template, eventId } = job.data;
+  
+  console.log(`📧 Sending ${recipients.length} emails for event ${eventId}`);
+  
+  // Process emails in batches to avoid overwhelming the email service
+  const batchSize = 10;
+  for (let i = 0; i < recipients.length; i += batchSize) {
+    const batch = recipients.slice(i, i + batchSize);
+    
+    // Send batch (implement actual email sending logic here)
+    await Promise.all(batch.map(async (recipient: any) => {
+      // Simulate email sending
+      await new Promise(resolve => setTimeout(resolve, 100));
+      console.log(`📨 Email sent to ${recipient.email}`);
+    }));
+    
+    // Short delay between batches
+    await new Promise(resolve => setTimeout(resolve, 100));
+  }
+});
+
+// RSVP follow-up job worker
+jobQueue.registerWorker('rsvp-followup', async (job: Job) => {
+  const { eventId, followupType } = job.data;
+  
+  console.log(`📞 Processing RSVP follow-up for event ${eventId}: ${followupType}`);
+  
+  // Implement RSVP follow-up logic
+  // This could include sending reminders, updating statuses, etc.
+  
+  await new Promise(resolve => setTimeout(resolve, 500)); // Simulate work
+});
+
+// Guest data import job worker
+jobQueue.registerWorker('import-guests', async (job: Job) => {
+  const { fileData, eventId } = job.data;
+  
+  console.log(`📊 Importing guest data for event ${eventId}`);
+  
+  // Process file import in background
+  // This prevents the API from timing out on large uploads
+  
+  await new Promise(resolve => setTimeout(resolve, 1000)); // Simulate processing
+});
+
+// Room assignment optimization job worker
+jobQueue.registerWorker('optimize-room-assignments', async (job: Job) => {
+  const { eventId } = job.data;
+  
+  console.log(`🏨 Optimizing room assignments for event ${eventId}`);
+  
+  // Run complex room assignment algorithm in background
+  // This can take several seconds for large guest lists
+  
+  await new Promise(resolve => setTimeout(resolve, 2000)); // Simulate optimization
+});
+
+/**
+ * UTILITY FUNCTIONS
+ */
+
+export function queueBulkEmailJob(recipients: any[], template: any, eventId: number): string {
+  return jobQueue.addJob('send-bulk-emails', { recipients, template, eventId }, 5);
+}
+
+export function queueRsvpFollowup(eventId: number, followupType: string): string {
+  return jobQueue.addJob('rsvp-followup', { eventId, followupType }, 3);
+}
+
+export function queueGuestImport(fileData: any, eventId: number): string {
+  return jobQueue.addJob('import-guests', { fileData, eventId }, 8);
+}
+
+export function queueRoomOptimization(eventId: number): string {
+  return jobQueue.addJob('optimize-room-assignments', { eventId }, 1);
+}

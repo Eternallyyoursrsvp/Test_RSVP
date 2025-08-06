@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="300px" height="300px" viewBox="0 0 300 300" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <g stroke="#BFA76F" stroke-width="1" fill="none" fill-rule="evenodd">
+        <circle cx="150" cy="150" r="100"></circle>
+        <circle cx="150" cy="150" r="85"></circle>
+        <circle cx="150" cy="150" r="70"></circle>
+        <circle cx="150" cy="150" r="55"></circle>
+        
+        <!-- Radial Lines -->
+        <line x1="150" y1="50" x2="150" y2="250" stroke-opacity="0.5"></line>
+        <line x1="50" y1="150" x2="250" y2="150" stroke-opacity="0.5"></line>
+        <line x1="79.29" y1="79.29" x2="220.71" y2="220.71" stroke-opacity="0.5"></line>
+        <line x1="79.29" y1="220.71" x2="220.71" y2="79.29" stroke-opacity="0.5"></line>
+        
+        <!-- Decorative Elements -->
+        <path d="M150,65 Q170,85 150,105 Q130,85 150,65" stroke-opacity="0.8"></path>
+        <path d="M150,195 Q170,215 150,235 Q130,215 150,195" stroke-opacity="0.8"></path>
+        <path d="M65,150 Q85,170 105,150 Q85,130 65,150" stroke-opacity="0.8"></path>
+        <path d="M195,150 Q215,170 235,150 Q215,130 195,150" stroke-opacity="0.8"></path>
+        
+        <!-- Corner Decorative Elements -->
+        <path d="M94.29,94.29 Q109.29,109.29 124.29,94.29 Q109.29,79.29 94.29,94.29" stroke-opacity="0.8"></path>
+        <path d="M175.71,94.29 Q190.71,109.29 205.71,94.29 Q190.71,79.29 175.71,94.29" stroke-opacity="0.8"></path>
+        <path d="M94.29,205.71 Q109.29,220.71 124.29,205.71 Q109.29,190.71 94.29,205.71" stroke-opacity="0.8"></path>
+        <path d="M175.71,205.71 Q190.71,220.71 205.71,205.71 Q190.71,190.71 175.71,205.71" stroke-opacity="0.8"></path>
+        
+        <!-- Outer Decorative Arcs -->
+        <path d="M85,150 A65,65 0 0,1 150,85" stroke-opacity="0.5"></path>
+        <path d="M150,85 A65,65 0 0,1 215,150" stroke-opacity="0.5"></path>
+        <path d="M215,150 A65,65 0 0,1 150,215" stroke-opacity="0.5"></path>
+        <path d="M150,215 A65,65 0 0,1 85,150" stroke-opacity="0.5"></path>
+        
+        <!-- Lotus Petals -->
+        <path d="M150,120 Q165,135 150,150 Q135,135 150,120" stroke-opacity="0.7"></path>
+        <path d="M150,150 Q165,165 150,180 Q135,165 150,150" stroke-opacity="0.7"></path>
+        <path d="M120,150 Q135,165 150,150 Q135,135 120,150" stroke-opacity="0.7"></path>
+        <path d="M150,150 Q165,135 180,150 Q165,165 150,150" stroke-opacity="0.7"></path>
+    </g>
+</svg>

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+    <title>Wedding RSVP System</title>
+    <base href="/" />
+    
+    <!-- Resource hints for better performance -->
+    <link rel="dns-prefetch" href="//localhost:5000">
+    <link rel="preconnect" href="/api" crossorigin>
+    
+    <!-- Preload critical routes -->
+    <link rel="modulepreload" href="/src/pages/dashboard.tsx">
+    <link rel="modulepreload" href="/src/pages/guest-list.tsx">
+    <link rel="modulepreload" href="/src/pages/events.tsx">
+
+    <script>
+      // Handle direct navigation to client routes
+      (function() {
+        // This will ensure that when a user visits /guest-rsvp/<token> directly
+        // the app still loads correctly and React Router can handle the route
+        var pathname = window.location.pathname;
+        
+        // Check if it's an RSVP link - if so, store the token
+        if (pathname.indexOf('/guest-rsvp/') === 0) {
+          var token = pathname.replace('/guest-rsvp/', '');
+          if (token) {
+            window.rsvpToken = token;
+            console.log('Direct RSVP access detected, token:', token);
+          }
+        }
+      })();
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+
+  </body>
+</html>

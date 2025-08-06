@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cookie Cleanup Interface</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            padding: 30px;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 3px solid #667eea;
+        }
+        
+        .header h1 {
+            color: #667eea;
+            margin: 0;
+            font-size: 2.5em;
+            font-weight: 300;
+        }
+        
+        .header p {
+            color: #666;
+            margin: 10px 0 0 0;
+            font-size: 1.1em;
+        }
+        
+        .dashboard {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .card {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            border-left: 4px solid #667eea;
+        }
+        
+        .card h3 {
+            margin: 0 0 15px 0;
+            color: #333;
+            font-size: 1.3em;
+        }
+        
+        .metric {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 10px 0;
+            padding: 8px 0;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .metric:last-child {
+            border-bottom: none;
+        }
+        
+        .metric-label {
+            font-weight: 500;
+            color: #555;
+        }
+        
+        .metric-value {
+            font-weight: bold;
+            color: #667eea;
+        }
+        
+        .status-indicator {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-left: 8px;
+        }
+        
+        .status-good { background-color: #28a745; }
+        .status-warning { background-color: #ffc107; }
+        .status-danger { background-color: #dc3545; }
+        
+        .actions {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 30px 0;
+        }
+        
+        .btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .btn:hover {
+            background: #5a67d8;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .btn.btn-danger {
+            background: #e53e3e;
+        }
+        
+        .btn.btn-danger:hover {
+            background: #c53030;
+        }
+        
+        .btn.btn-success {
+            background: #38a169;
+        }
+        
+        .btn.btn-success:hover {
+            background: #2f855a;
+        }
+        
+        .btn.btn-warning {
+            background: #d69e2e;
+        }
+        
+        .btn.btn-warning:hover {
+            background: #b7791f;
+        }
+        
+        .console {
+            background: #1a202c;
+            color: #e2e8f0;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            max-height: 300px;
+            overflow-y: auto;
+            border: 2px solid #2d3748;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 20px;
+            background: #e2e8f0;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 10px 0;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #48bb78, #38a169);
+            border-radius: 10px;
+            transition: width 0.5s ease;
+            position: relative;
+        }
+        
+        .progress-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-weight: bold;
+            font-size: 12px;
+        }
+        
+        .alert {
+            padding: 15px 20px;
+            border-radius: 8px;
+            margin: 15px 0;
+            border: 1px solid;
+        }
+        
+        .alert.alert-danger {
+            background: #fed7d7;
+            color: #742a2a;
+            border-color: #feb2b2;
+        }
+        
+        .alert.alert-warning {
+            background: #fefcbf;
+            color: #744210;
+            border-color: #f6e05e;
+        }
+        
+        .alert.alert-success {
+            background: #c6f6d5;
+            color: #22543d;
+            border-color: #9ae6b4;
+        }
+        
+        .hidden {
+            display: none !important;
+        }
+        
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-left: 10px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .cookie-list {
+            max-height: 200px;
+            overflow-y: auto;
+            border: 1px solid #e2e8f0;
+            border-radius: 5px;
+            padding: 10px;
+            background: white;
+        }
+        
+        .cookie-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 5px 0;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .cookie-item:last-child {
+            border-bottom: none;
+        }
+        
+        .cookie-name {
+            font-weight: 500;
+            color: #2d3748;
+        }
+        
+        .cookie-size {
+            color: #718096;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🍪 Cookie Cleanup Interface</h1>
+            <p>Comprehensive cookie analysis, cleanup, and monitoring dashboard</p>
+        </div>
+        
+        <div class="dashboard">
+            <div class="card">
+                <h3>📊 Current Status</h3>
+                <div id="current-stats">
+                    <div class="metric">
+                        <span class="metric-label">Total Cookies:</span>
+                        <span class="metric-value" id="total-cookies">Loading... <div class="loading"></div></span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-label">Total Size:</span>
+                        <span class="metric-value" id="total-size">Loading... <div class="loading"></div></span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-label">Oversized Cookies:</span>
+                        <span class="metric-value" id="oversized-count">Loading... <div class="loading"></div></span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-label">Health Status:</span>
+                        <span class="metric-value" id="health-status">Loading... <div class="loading"></div></span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <h3>⚡ Quick Actions</h3>
+                <div class="actions" style="grid-template-columns: 1fr;">
+                    <button class="btn btn-warning" onclick="analyzeCookies()">🔍 Analyze Cookies</button>
+                    <button class="btn btn-danger" onclick="runCleanup()">🧹 Run Cleanup</button>
+                    <button class="btn btn-success" onclick="startMonitoring()">📊 Start Monitoring</button>
+                    <button class="btn" onclick="exportData()">📥 Export Data</button>
+                </div>
+            </div>
+            
+            <div class="card">
+                <h3>🔍 Cookie Details</h3>
+                <div id="cookie-list" class="cookie-list">
+                    <div style="text-align: center; padding: 20px; color: #718096;">
+                        Click "Analyze Cookies" to see detailed information
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div id="alerts-container"></div>
+        
+        <div class="card">
+            <h3>📋 Console Output</h3>
+            <div id="console-output" class="console">
+                <div style="color: #68d391;">Cookie Cleanup Interface loaded successfully!</div>
+                <div style="color: #90cdf4;">Ready for cookie analysis and cleanup operations.</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Load all cookie management scripts -->
+    <script src="cookie-analyzer.js"></script>
+    <script src="cookie-cleanup.js"></script>
+    <script src="cookie-monitor.js"></script>
+    <script src="execute-cookie-cleanup.js"></script>
+    
+    <script>
+        // UI Management
+        class CookieUI {
+            constructor() {
+                this.consoleElement = document.getElementById('console-output');
+                this.alertsContainer = document.getElementById('alerts-container');
+                this.initialize();
+            }
+            
+            initialize() {
+                // Intercept console logs
+                const originalLog = console.log;
+                const originalWarn = console.warn;
+                const originalError = console.error;
+                
+                console.log = (...args) => {
+                    this.appendToConsole(args.join(' '), 'log');
+                    originalLog.apply(console, args);
+                };
+                
+                console.warn = (...args) => {
+                    this.appendToConsole(args.join(' '), 'warn');
+                    originalWarn.apply(console, args);
+                };
+                
+                console.error = (...args) => {
+                    this.appendToConsole(args.join(' '), 'error');
+                    originalError.apply(console, args);
+                };
+                
+                // Initialize dashboard
+                this.updateDashboard();
+                
+                // Auto-update every 5 seconds
+                setInterval(() => this.updateDashboard(), 5000);
+            }
+            
+            appendToConsole(message, type = 'log') {
+                const colors = {
+                    log: '#e2e8f0',
+                    warn: '#fbb6ce',
+                    error: '#fc8181'
+                };
+                
+                const div = document.createElement('div');
+                div.style.color = colors[type];
+                div.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+                
+                this.consoleElement.appendChild(div);
+                this.consoleElement.scrollTop = this.consoleElement.scrollHeight;
+                
+                // Keep only last 100 lines
+                while (this.consoleElement.children.length > 100) {
+                    this.consoleElement.removeChild(this.consoleElement.firstChild);
+                }
+            }
+            
+            showAlert(message, type = 'info') {
+                const alert = document.createElement('div');
+                alert.className = `alert alert-${type}`;
+                alert.textContent = message;
+                
+                this.alertsContainer.appendChild(alert);
+                
+                // Auto-remove after 5 seconds
+                setTimeout(() => {
+                    if (alert.parentNode) {
+                        alert.parentNode.removeChild(alert);
+                    }
+                }, 5000);
+            }
+            
+            updateDashboard() {
+                try {
+                    const cookies = this.parseCookies();
+                    const totalSize = cookies.reduce((sum, c) => sum + c.size, 0);
+                    const oversized = cookies.filter(c => c.size > 4096).length;
+                    
+                    document.getElementById('total-cookies').textContent = cookies.length;
+                    document.getElementById('total-size').textContent = `${Math.round(totalSize / 1024)}KB`;
+                    document.getElementById('oversized-count').textContent = oversized;
+                    
+                    // Health status
+                    let status = 'Healthy';
+                    let statusClass = 'status-good';
+                    
+                    if (totalSize > 50 * 1024 || cookies.length > 20 || oversized > 0) {
+                        status = 'Warning';
+                        statusClass = 'status-warning';
+                    }
+                    
+                    if (totalSize > 100 * 1024 || cookies.length > 50 || oversized > 5) {
+                        status = 'Critical';
+                        statusClass = 'status-danger';
+                    }
+                    
+                    document.getElementById('health-status').innerHTML = 
+                        `${status} <span class="status-indicator ${statusClass}"></span>`;
+                    
+                } catch (error) {
+                    console.error('Dashboard update failed:', error);
+                }
+            }
+            
+            updateCookieList(cookies = null) {
+                const container = document.getElementById('cookie-list');
+                
+                if (!cookies) {
+                    cookies = this.parseCookies();
+                }
+                
+                if (cookies.length === 0) {
+                    container.innerHTML = '<div style="text-align: center; padding: 20px; color: #718096;">No cookies found</div>';
+                    return;
+                }
+                
+                container.innerHTML = cookies.map(cookie => `
+                    <div class="cookie-item">
+                        <span class="cookie-name">${cookie.name}</span>
+                        <span class="cookie-size">${Math.round(cookie.size / 1024 * 100) / 100}KB</span>
+                    </div>
+                `).join('');
+            }
+            
+            parseCookies() {
+                if (!document.cookie) return [];
+                
+                return document.cookie.split(';').map(cookie => {
+                    const [name, ...valueParts] = cookie.trim().split('=');
+                    const value = valueParts.join('=') || '';
+                    return {
+                        name: name.trim(),
+                        value,
+                        size: cookie.length
+                    };
+                }).filter(cookie => cookie.name);
+            }
+        }
+        
+        // Initialize UI
+        const ui = new CookieUI();
+        window.cookieUI = ui;
+        
+        // Global action functions
+        function analyzeCookies() {
+            ui.showAlert('Starting cookie analysis...', 'info');
+            
+            try {
+                const analysis = window.cookieAnalysis ? window.cookieAnalysis() : window.analyzeCookies();
+                ui.updateCookieList(analysis.cookies || analysis.cookieDetails || []);
+                ui.showAlert('Cookie analysis completed successfully!', 'success');
+            } catch (error) {
+                ui.showAlert(`Analysis failed: ${error.message}`, 'danger');
+            }
+        }
+        
+        async function runCleanup() {
+            ui.showAlert('Starting comprehensive cleanup...', 'warning');
+            
+            try {
+                if (window.executeCookieCleanup) {
+                    const results = await window.executeCookieCleanup();
+                    ui.showAlert(`Cleanup completed! Removed ${results.summary.cookiesRemoved} cookies, saved ${Math.round(results.summary.sizeSaved / 1024)}KB`, 'success');
+                } else {
+                    window.cleanupCookies();
+                    ui.showAlert('Basic cleanup completed!', 'success');
+                }
+                
+                // Update dashboard
+                setTimeout(() => ui.updateDashboard(), 1000);
+                
+            } catch (error) {
+                ui.showAlert(`Cleanup failed: ${error.message}`, 'danger');
+            }
+        }
+        
+        function startMonitoring() {
+            ui.showAlert('Starting real-time monitoring...', 'info');
+            
+            try {
+                if (window.startCookieMonitoring) {
+                    window.startCookieMonitoring();
+                    ui.showAlert('Real-time monitoring started! Check the dashboard in the top-right corner.', 'success');
+                } else {
+                    ui.showAlert('Monitoring service not available', 'warning');
+                }
+            } catch (error) {
+                ui.showAlert(`Failed to start monitoring: ${error.message}`, 'danger');
+            }
+        }
+        
+        function exportData() {
+            ui.showAlert('Exporting cookie data...', 'info');
+            
+            try {
+                if (window.exportCookieMetrics) {
+                    window.exportCookieMetrics();
+                    ui.showAlert('Cookie metrics exported successfully!', 'success');
+                } else {
+                    // Fallback export
+                    const data = {
+                        timestamp: new Date().toISOString(),
+                        cookies: ui.parseCookies(),
+                        totalSize: document.cookie.length,
+                        userAgent: navigator.userAgent,
+                        url: window.location.href
+                    };
+                    
+                    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = `cookie-export-${Date.now()}.json`;
+                    a.click();
+                    URL.revokeObjectURL(url);
+                    
+                    ui.showAlert('Cookie data exported successfully!', 'success');
+                }
+            } catch (error) {
+                ui.showAlert(`Export failed: ${error.message}`, 'danger');
+            }
+        }
+        
+        // Auto-analyze on load
+        setTimeout(() => {
+            console.log('🚀 Auto-analyzing cookies on load...');
+            analyzeCookies();
+        }, 1000);
+    </script>
+</body>
+</html>

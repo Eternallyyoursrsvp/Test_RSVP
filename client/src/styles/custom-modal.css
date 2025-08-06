@@ -1,0 +1,35 @@
+/* iOS 18 Modal background override */
+[data-radix-dialog-content] {
+  background-color: white !important;
+  border-radius: 0.75rem !important;
+}
+
+/* Dark mode modals */
+.dark [data-radix-dialog-content] {
+  background-color: #2A2A2A !important;
+  color: #FFFFFF !important;
+  border: 1px solid #374151 !important;
+}
+
+/* Override the event wizard dialog content */
+[role="dialog"] [data-radix-dialog-content] {
+  background-color: white !important;
+}
+
+.dark [role="dialog"] [data-radix-dialog-content] {
+  background-color: #2A2A2A !important;
+  color: #FFFFFF !important;
+}
+
+/* Gold gradient buttons should remain purple */
+.gold-gradient {
+  background: hsl(var(--primary)) !important;
+  background-image: none !important;
+  color: white !important;
+}
+
+/* Back button - keep outline style */
+button[type="button"][variant="outline"] {
+  border-color: hsl(var(--primary)) !important;
+  color: hsl(var(--primary)) !important;
+}

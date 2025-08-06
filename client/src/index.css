@@ -1,0 +1,535 @@
+/* Import local fonts for better performance */
+@import "@fontsource/inter/400.css";
+@import "@fontsource/inter/500.css";
+@import "@fontsource/inter/600.css";
+@import "@fontsource/inter/700.css";
+@import "@fontsource/cormorant-garamond/400.css";
+@import "@fontsource/cormorant-garamond/500.css";
+@import "@fontsource/cormorant-garamond/600.css";
+@import "@fontsource/cormorant-garamond/700.css";
+
+@import './styles/custom-modal.css';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ===========================================
+   DESIGN SYSTEM INTEGRATION
+   Master token-based CSS variables from design-system/tokens.ts
+   =========================================== */
+
+:root {
+  /* Light mode - based on design tokens */
+  --background: 0 0% 100%;                    /* Pure white #FFFFFF */
+  --foreground: 210 9% 11%;                   /* colors.neutral.light.foreground */
+  --card: 0 0% 100%;                          /* Pure white #FFFFFF */
+  --card-foreground: 210 9% 11%;              /* colors.neutral.light.foreground */
+  --popover: 0 0% 100%;                       /* colors.neutral.light.card */
+  --popover-foreground: 210 9% 11%;           /* colors.neutral.light.foreground */
+  --primary: 258 73% 59%;                     /* Exact brand purple #7A51E1 */
+  --primary-foreground: 0 0% 100%;            /* White on purple */
+  --secondary: 47 65% 66%;                    /* Exact brand gold #E3C76F */
+  --secondary-foreground: 210 9% 11%;         /* Dark on gold */
+  --muted: 220 14% 96%;                       /* colors.neutral.light.muted */
+  --muted-foreground: 215 16% 47%;            /* colors.neutral.light.muted-foreground */
+  --accent: 258 73% 59%;                      /* Brand purple for accents */
+  --accent-foreground: 210 9% 11%;            /* Dark on gold */
+  --destructive: 0 84% 60%;                   /* colors.accent.error */
+  --destructive-foreground: 0 0% 100%;        /* White on red */
+  --border: 220 13% 91%;                      /* colors.neutral.light.border */
+  --input: 220 13% 91%;                       /* colors.neutral.light.border */
+  --ring: 258 73% 59%;                        /* Exact brand purple #7A51E1 */
+  --radius: 0.75rem;                          /* borderRadius.lg */
+  
+  /* Chart colors - exact brand theme */
+  --chart-1: 258 73% 59%;                     /* Exact brand purple #7A51E1 */
+  --chart-2: 258 73% 70%;                     /* Lighter purple */
+  --chart-3: 258 73% 80%;                     /* Even lighter purple */
+  --chart-4: 47 65% 66%;                      /* Exact brand gold #E3C76F */
+  --chart-5: 160 84% 39%;                     /* Success green */
+  
+  /* Sidebar variables for consistency */
+  --sidebar: 0 0% 100%;                       /* White background */
+  --sidebar-foreground: 210 9% 11%;           /* Dark text */
+  --sidebar-border: 220 13% 91%;              /* Light border */
+  --sidebar-accent: 258 73% 96%;              /* Very light purple hover */
+  --sidebar-primary: 258 73% 59%;             /* Exact brand purple #7A51E1 */
+  
+  /* Design system tokens */
+  --font-sans: 'Inter', system-ui, sans-serif;
+  --font-serif: 'Cormorant Garamond', serif;
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.07);
+  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+  --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.1);
+}
+
+.dark {
+  /* Dark mode - based on design tokens */
+  --background: 0 0% 7%;                      /* Exact dark background #121212 */
+  --foreground: 210 20% 98%;                  /* colors.neutral.dark.foreground */
+  --card: 0 0% 12%;                           /* Slightly lighter for cards #1E1E1E */
+  --card-foreground: 210 20% 98%;             /* colors.neutral.dark.foreground */
+  --popover: 0 0% 12%;                        /* Same as card */
+  --popover-foreground: 210 20% 98%;          /* colors.neutral.dark.foreground */
+  --primary: 258 73% 59%;                     /* Exact brand purple #7A51E1 */
+  --primary-foreground: 0 0% 100%;            /* White on purple */
+  --secondary: 47 65% 66%;                    /* Exact brand gold #E3C76F */
+  --secondary-foreground: 0 0% 7%;            /* Dark on gold */
+  --muted: 0 0% 15%;                          /* Darker muted #262626 */
+  --muted-foreground: 0 0% 64%;               /* Light gray for secondary text */
+  --accent: 258 73% 59%;                      /* Brand purple for accents */
+  --accent-foreground: 0 0% 100%;             /* White on purple */
+  --destructive: 0 63% 31%;                   /* Darker red for dark mode */
+  --destructive-foreground: 0 0% 100%;        /* White on red */
+  --border: 0 0% 16%;                         /* Dark gray borders #2A2A2A */
+  --input: 0 0% 16%;                          /* Dark gray borders #2A2A2A */
+  --ring: 258 73% 59%;                        /* Exact brand purple #7A51E1 */
+  
+  /* Dark mode sidebar variables */
+  --sidebar: 0 0% 7%;                         /* Same as background */
+  --sidebar-foreground: 210 20% 85%;          /* Lighter text for readability */
+  --sidebar-border: 215 19% 25%;              /* Darker border */
+  --sidebar-accent: 270 47% 15%;              /* Dark purple hover */
+  --sidebar-primary: 270 47% 45%;             /* Brighter purple for dark mode */
+  
+  /* Chart colors - same purple theme */
+  --chart-1: 270 47% 38%;                     /* Primary purple */
+  --chart-2: 270 35% 50%;                     /* Lighter purple */
+  --chart-3: 270 25% 65%;                     /* Even lighter purple */
+  --chart-4: 44 26% 60%;                      /* Gold accent */
+  --chart-5: 160 84% 39%;                     /* Success green */
+  
+  /* Dark mode shadows */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.5);
+  --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.6);
+}
+
+/* ===========================================
+   BASE LAYER - DESIGN SYSTEM FOUNDATION
+   =========================================== */
+
+@layer base {
+  * {
+    border-color: hsl(var(--border));
+  }
+
+  body {
+    background-color: hsl(var(--background));
+    color: hsl(var(--foreground));
+    font-family: var(--font-sans);
+    font-feature-settings: "rlig" 1, "calt" 1;
+    line-height: 1.5;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    color: hsl(var(--foreground));
+    font-weight: 600;
+  }
+
+  /* Ensure all input elements follow design system */
+  input, textarea, select {
+    background-color: hsl(var(--background));
+    border-color: hsl(var(--border));
+    color: hsl(var(--foreground));
+  }
+
+  input:focus, textarea:focus, select:focus {
+    outline: none;
+    border-color: hsl(var(--primary));
+    box-shadow: 0 0 0 3px hsl(var(--primary) / 0.1);
+  }
+}
+
+/* ===========================================
+   COMPONENT LAYER - DESIGN TOKEN IMPLEMENTATIONS
+   =========================================== */
+
+@layer components {
+  /* Button implementations from design system */
+  .btn-primary {
+    @apply inline-flex items-center justify-center font-medium transition-all duration-200 
+           bg-primary text-primary-foreground shadow-sm hover:bg-primary/90 
+           hover:shadow-md hover:scale-105 focus:ring-2 focus:ring-primary focus:ring-offset-2 
+           rounded-md px-6 py-3;
+  }
+  
+  .btn-outline {
+    @apply inline-flex items-center justify-center font-medium transition-all duration-200
+           bg-transparent text-primary border border-primary 
+           hover:bg-primary/10 hover:scale-105 focus:ring-2 focus:ring-primary focus:ring-offset-2
+           rounded-md px-6 py-3;
+  }
+  
+  .btn-ghost {
+    @apply inline-flex items-center justify-center font-medium transition-all duration-200
+           bg-transparent text-foreground hover:bg-muted hover:scale-105 
+           focus:ring-2 focus:ring-muted focus:ring-offset-2 rounded-md px-6 py-3;
+  }
+  
+  /* Form input styling */
+  .form-input {
+    @apply w-full rounded-md border border-input bg-background px-3 py-2 text-sm 
+           transition-all duration-200 focus:border-primary focus:ring-2 focus:ring-primary/20 
+           focus:outline-none disabled:cursor-not-allowed disabled:opacity-50;
+  }
+  
+  /* Card implementations from design system */
+  .card-glass {
+    @apply bg-card/80 backdrop-blur-sm border border-border text-card-foreground 
+           shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300
+           rounded-xl p-6;
+  }
+  
+  .card-solid {
+    @apply bg-card border border-border text-card-foreground 
+           shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300
+           rounded-xl p-6;
+  }
+  
+  /* Wizard step styling */
+  .wizard-step {
+    @apply flex items-center justify-center w-8 h-8 rounded-full font-medium text-sm
+           transition-all duration-200;
+  }
+  
+  .wizard-step-active {
+    @apply bg-primary text-primary-foreground;
+  }
+  
+  .wizard-step-completed {
+    @apply bg-primary/20 text-primary border-2 border-primary;
+  }
+  
+  .wizard-step-inactive {
+    @apply bg-muted text-muted-foreground border-2 border-border;
+  }
+  
+  /* Navigation implementations from design system */
+  .nav-item {
+    @apply flex items-center px-3 py-2 rounded-md text-sm font-medium 
+           no-underline transition-all duration-150 cursor-pointer
+           text-muted-foreground hover:bg-muted hover:text-foreground;
+  }
+  
+  .nav-item-active {
+    @apply bg-muted text-primary font-semibold;
+    border-left: 3px solid hsl(var(--primary));
+    padding-left: calc(0.75rem - 3px);
+  }
+  
+  /* Status badge implementations */
+  .status-badge {
+    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
+           border transition-colors duration-150;
+  }
+  
+  .status-confirmed {
+    @apply bg-green-50 text-green-700 border-green-200;
+  }
+  
+  .status-pending {
+    @apply bg-yellow-50 text-yellow-700 border-yellow-200;
+  }
+  
+  .status-declined {
+    @apply bg-red-50 text-red-700 border-red-200;
+  }
+  
+  /* Dark mode status badges */
+  .dark .status-confirmed {
+    @apply bg-green-900/30 text-green-400 border-green-700;
+  }
+  
+  .dark .status-pending {
+    @apply bg-yellow-900/30 text-yellow-400 border-yellow-700;
+  }
+  
+  .dark .status-declined {
+    @apply bg-red-900/30 text-red-400 border-red-700;
+  }
+  
+  /* Table implementations from design system */
+  .table-container {
+    @apply border border-border rounded-lg overflow-hidden bg-card shadow-sm;
+  }
+  
+  .table-header {
+    @apply bg-muted text-foreground font-semibold text-left p-4 border-b border-border 
+           text-sm tracking-wide;
+  }
+  
+  .table-cell {
+    @apply text-foreground p-4 border-b border-border hover:bg-muted/30 transition-all duration-200
+           text-sm;
+  }
+  
+  .table-row:last-child .table-cell {
+    @apply border-b-0;
+  }
+  
+  .table-row:hover {
+    @apply bg-muted/20;
+  }
+  
+  /* Responsive button sizing */
+  @media (max-width: 768px) {
+    .btn-primary,
+    .btn-outline,
+    .btn-ghost {
+      @apply px-4 py-2 text-sm;
+    }
+  }
+}
+
+/* ===========================================
+   UTILITY LAYER - DESIGN SYSTEM UTILITIES
+   =========================================== */
+
+@layer utilities {
+  /* Typography utilities from design system */
+  .font-serif {
+    font-family: var(--font-serif);
+  }
+  
+  .font-sans {
+    font-family: var(--font-sans);
+  }
+  
+  /* Border utilities */
+  .border-l-3 {
+    border-left-width: 3px;
+  }
+  
+  /* Shadow utilities from design system */
+  .shadow-luxury {
+    box-shadow: var(--shadow-lg);
+  }
+  
+  .shadow-subtle {
+    box-shadow: var(--shadow-sm);
+  }
+  
+  /* CRITICAL: iOS 18 Glassmorphism System - Per Luxury Specification */
+  .glass-light {
+    background: rgba(255, 255, 255, 0.6);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+  }
+  
+  .glass-dark {
+    background: rgba(30, 30, 30, 0.5);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  
+  /* Apply glassmorphism based on theme */
+  :root .glass {
+    background: rgba(255, 255, 255, 0.6);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+  }
+  
+  .dark .glass {
+    background: rgba(30, 30, 30, 0.5);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  
+  /* iOS 18 Focus Ring System */
+  .focus-ring-luxury:focus {
+    outline: 2px solid hsl(var(--primary)) !important;
+    outline-offset: 2px !important;
+    box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1) !important;
+    transition: all 150ms ease-out !important;
+  }
+  
+  .focus-ring-luxury:focus-visible {
+    outline: 2px solid hsl(var(--primary)) !important;
+    outline-offset: 2px !important;
+    box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1) !important;
+  }
+  
+  /* CRITICAL: Missing Hover Transform System */
+  .hover-scale-luxury {
+    transition: all 200ms ease-out !important;
+  }
+  
+  .hover-scale-luxury:hover {
+    transform: scale(1.02) !important;
+    box-shadow: var(--shadow-lg) !important;
+  }
+  
+  .hover-scale-luxury:active {
+    transform: scale(0.98) !important;
+    transition: all 150ms cubic-bezier(0.4, 0, 1, 1) !important;
+  }
+  
+  /* CRITICAL: Card Hover Shadow Step-up */
+  .card-hover-luxury {
+    box-shadow: var(--shadow-sm);
+    transition: all 200ms ease-out !important;
+  }
+  
+  .card-hover-luxury:hover {
+    box-shadow: var(--shadow-md) !important;
+    transform: translateY(-1px) !important;
+  }
+  
+  /* Animation utilities */
+  .animate-fade-in {
+    animation: fadeIn 0.3s ease-in-out;
+  }
+  
+  .animate-slide-up {
+    animation: slideUp 0.3s ease-out;
+  }
+  
+  /* Legacy hover effects - REPLACED WITH LUXURY VERSIONS */
+  .hover-lift {
+    @apply hover:-translate-y-1 hover:shadow-lg transition-all duration-150;
+  }
+  
+  .hover-scale {
+    @apply hover:scale-105 transition-transform duration-150;
+  }
+  
+  /* Color enforcement utilities */
+  .text-design-foreground {
+    color: hsl(var(--foreground)) !important;
+  }
+  
+  .text-design-muted {
+    color: hsl(var(--muted-foreground)) !important;
+  }
+  
+  .bg-design-background {
+    background-color: hsl(var(--background)) !important;
+  }
+  
+  .bg-design-card {
+    background-color: hsl(var(--card)) !important;
+  }
+  
+  .border-design {
+    border-color: hsl(var(--border)) !important;
+  }
+}
+
+/* ===========================================
+   KEYFRAME ANIMATIONS
+   =========================================== */
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { 
+    opacity: 0; 
+    transform: translateY(10px); 
+  }
+  to { 
+    opacity: 1; 
+    transform: translateY(0); 
+  }
+}
+
+/* ===========================================
+   COMPONENT-SPECIFIC INTEGRATIONS
+   =========================================== */
+
+/* Chart component styling */
+.recharts-cartesian-axis-tick-value,
+.recharts-legend-item-text,
+.recharts-tooltip-label,
+.recharts-tooltip-item {
+  fill: hsl(var(--foreground)) !important;
+  color: hsl(var(--foreground)) !important;
+}
+
+.recharts-cartesian-grid line {
+  stroke: hsl(var(--border)) !important;
+  opacity: 0.5;
+}
+
+.recharts-tooltip-wrapper {
+  background-color: hsl(var(--card)) !important;
+  border: 1px solid hsl(var(--border)) !important;
+  border-radius: 0.5rem !important;
+  box-shadow: var(--shadow-md) !important;
+}
+
+/* Progress bar styling */
+.progress-bar,
+.progress-indicator {
+  background-color: hsl(var(--primary)) !important;
+}
+
+.progress-track {
+  background-color: hsl(var(--muted)) !important;
+}
+
+/* Modal and dialog overrides */
+.dialog-overlay {
+  background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+}
+
+.dialog-content {
+  background-color: hsl(var(--card));
+  border: 1px solid hsl(var(--border));
+  color: hsl(var(--card-foreground));
+  box-shadow: var(--shadow-xl);
+}
+
+/* ===========================================
+   FORCED COLOR CORRECTIONS
+   Prevents any non-design-system colors
+   =========================================== */
+
+/* Force override any hardcoded colors that don't follow design system */
+.text-neutral,
+.text-gray-400,
+.text-gray-500,
+.text-gray-600,
+.text-gray-700,
+.text-gray-800 {
+  color: hsl(var(--muted-foreground)) !important;
+}
+
+.bg-neutral,
+.bg-gray-50,
+.bg-gray-100,
+.bg-gray-200 {
+  background-color: hsl(var(--muted)) !important;
+}
+
+.border-gray-200,
+.border-gray-300,
+.border-neutral {
+  border-color: hsl(var(--border)) !important;
+}
+
+/* Ensure consistent text colors for all headings and paragraphs */
+h1, h2, h3, h4, h5, h6, p, span, div, label {
+  color: inherit;
+}
+
+/* Sidebar specific corrections */
+.sidebar-container {
+  background-color: hsl(var(--background)) !important;
+  border-color: hsl(var(--border)) !important;
+  color: hsl(var(--foreground)) !important;
+}
+
+/* Dashboard stats specific corrections */
+.stats-card {
+  background-color: hsl(var(--card)) !important;
+  color: hsl(var(--card-foreground)) !important;
+  border-color: hsl(var(--border)) !important;
+}

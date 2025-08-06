@@ -1,0 +1,65 @@
+{
+  "name": "wedding-rsvp-testing-setup",
+  "description": "Testing dependencies and scripts for Wedding RSVP Platform Ver4",
+  "scripts": {
+    "test": "vitest",
+    "test:unit": "vitest run --coverage",
+    "test:integration": "vitest run tests/integration",
+    "test:e2e": "playwright test",
+    "test:e2e:headed": "playwright test --headed",
+    "test:e2e:debug": "playwright test --debug",
+    "test:performance": "k6 run tests/performance/load-test.js",
+    "test:security": "npm audit && snyk test",
+    "test:accessibility": "playwright test tests/accessibility",
+    "test:all": "npm run test:unit && npm run test:integration && npm run test:e2e",
+    "test:ci": "npm run test:unit -- --reporter=junit --reporter=html && npm run test:e2e -- --reporter=junit",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "playwright:install": "playwright install",
+    "playwright:install-deps": "playwright install-deps"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.40.0",
+    "@testing-library/jest-dom": "^6.1.4",
+    "@testing-library/react": "^14.0.0",
+    "@testing-library/user-event": "^14.5.1",
+    "@types/testing-library__jest-dom": "^6.0.0",
+    "@vitest/coverage-v8": "^1.0.0",
+    "@vitest/ui": "^1.0.0",
+    "@axe-core/playwright": "^4.8.2",
+    "jsdom": "^23.0.0",
+    "k6": "^0.47.0",
+    "lighthouse": "^11.3.0",
+    "supertest": "^6.3.3",
+    "vitest": "^1.0.0",
+    "faker": "^6.6.6",
+    "@faker-js/faker": "^8.3.1",
+    "snyk": "^1.1256.0",
+    "cross-env": "^7.0.3",
+    "rimraf": "^5.0.5"
+  },
+  "vitest": {
+    "globals": true,
+    "environment": "jsdom",
+    "setupFiles": ["./tests/setup.ts"],
+    "coverage": {
+      "provider": "v8",
+      "reporter": ["text", "json", "html"],
+      "exclude": [
+        "node_modules/",
+        "dist/",
+        "tests/",
+        "**/*.d.ts",
+        "**/*.config.*"
+      ],
+      "thresholds": {
+        "global": {
+          "branches": 80,
+          "functions": 85,
+          "lines": 85,
+          "statements": 85
+        }
+      }
+    }
+  }
+}

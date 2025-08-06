@@ -1,0 +1,54 @@
+node_modules
+dist
+.DS_Store
+server/public
+vite.config.ts.*
+*.tar.gz
+
+# Environment variables and secrets
+.env
+.env.local
+.env.development
+.env.production
+
+# WhatsApp authentication data
+.wwebjs_auth/
+.wwebjs_cache/
+session-*/
+
+# Attached assets (contain sensitive data)
+attached_assets/
+
+# Upload directories
+uploads/
+public/uploads/
+
+# Log files
+logs/
+*.log
+
+# Development assets and temporary files
+docs/archive/development-assets/
+cleanup_temp/
+cookies.txt
+*.tmp
+*.temp
+
+# Large media files
+*.mov
+*.mp4
+*.avi
+*.wmv
+*.mkv
+*.flv
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
