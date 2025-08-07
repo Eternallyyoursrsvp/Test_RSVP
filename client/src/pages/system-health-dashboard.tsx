@@ -11,7 +11,7 @@ import {
   CheckCircle2,
   AlertTriangle,
   Cpu,
-  Memory,
+  MemoryStick as Memory,
   HardDrive
 } from "lucide-react";
 
