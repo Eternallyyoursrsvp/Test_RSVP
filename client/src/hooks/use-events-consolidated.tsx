@@ -52,13 +52,6 @@ export function useEvents() {
         setCurrentEventId(response.data.id);
       }
     },
-    onError: (error: any) => {
-      toast({
-        title: "Failed to create event", 
-        description: error.message || "An error occurred",
-        variant: "destructive"
-      });
-    }
   });
   
   // Update event mutation

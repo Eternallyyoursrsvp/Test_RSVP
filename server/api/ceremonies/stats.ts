@@ -9,7 +9,8 @@ export async function getCeremonyStats(req: Request, res: Response): Promise<voi
     const ceremonyId = parseInt(req.params.id, 10);
     
     if (isNaN(ceremonyId)) {
-      return ResponseBuilder.badRequest(res, 'Invalid ceremony ID');
+      ResponseBuilder.badRequest(res, 'Invalid ceremony ID');
+      return;
     }
     
     // Create service context

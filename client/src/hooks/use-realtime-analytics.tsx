@@ -138,7 +138,7 @@ export function useRealtimeAnalytics(): UseRealtimeAnalyticsReturn {
           payload: {
             subscriptions,
             userId: user.id.toString(),
-            tenantId: user.tenantId?.toString(),
+            tenantId: (user as any).tenantId?.toString(),
             eventId: currentEvent?.id?.toString()
           }
         }));

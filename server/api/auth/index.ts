@@ -98,18 +98,17 @@ export async function createAuthAPI(): Promise<Router> {
   // Status endpoint
   router.get('/status', (req, res) => {
     if (req.isAuthenticated() && req.user) {
-      const userObj = req.user as Record<string, unknown>;
       const user = {
-        id: userObj.id,
-        username: userObj.username,
-        name: userObj.name || 'User',
-        email: userObj.email || '',
-        role: userObj.role || 'couple',
+        id: req.user.id,
+        username: req.user.username,
+        name: req.user.name || 'User',
+        email: req.user.email || '',
+        role: req.user.role || 'couple',
       };
       return res.json({ 
         user, 
         authenticated: true,
-        passwordChangeRequired: userObj.password_change_required || false
+        passwordChangeRequired: (req.user as any).password_change_required || false
       });
     } else {
       return res.status(401).json({ message: 'Not authenticated', authenticated: false });
@@ -119,17 +118,16 @@ export async function createAuthAPI(): Promise<Router> {
   // User endpoint (similar to status but with different response format)
   router.get('/user', (req, res) => {
     if (req.isAuthenticated() && req.user) {
-      const userObj = req.user as Record<string, unknown>;
       const user = {
-        id: userObj.id,
-        username: userObj.username,
-        name: userObj.name || 'User',
-        email: userObj.email || '',
-        role: userObj.role || 'couple',
+        id: req.user.id,
+        username: req.user.username,
+        name: req.user.name || 'User',
+        email: req.user.email || '',
+        role: req.user.role || 'couple',
       };
       return res.json({ 
         user,
-        passwordChangeRequired: userObj.password_change_required || false
+        passwordChangeRequired: (req.user as any).password_change_required || false
       });
     } else {
       return res.status(401).json({ message: 'Not authenticated' });
@@ -202,11 +200,11 @@ export async function createAuthAPI(): Promise<Router> {
 
   router.put('/profile', isAuthenticated, validator.validate(profileUpdateSchema), async (req, res) => {
     try {
-      const userId = req.user.id;
+      const userId = req.user!.id;
       const profileData = req.validatedBody;
       
       // Check if username is already taken by another user
-      if (profileData.username !== req.user.username) {
+      if (profileData.username !== req.user!.username) {
         const existingUser = await storage.getUserByUsername(profileData.username);
         if (existingUser && existingUser.id !== userId) {
           return res.status(400).json({ message: 'Username already exists' });
@@ -214,7 +212,7 @@ export async function createAuthAPI(): Promise<Router> {
       }
       
       // Check if email is already taken by another user
-      if (profileData.email !== req.user.email) {
+      if (profileData.email !== req.user!.email) {
         const existingUser = await storage.getUserByEmail(profileData.email);
         if (existingUser && existingUser.id !== userId) {
           return res.status(400).json({ message: 'Email already exists' });
@@ -223,6 +221,10 @@ export async function createAuthAPI(): Promise<Router> {
       
       // Update user profile
       const updatedUser = await storage.updateUser(userId, profileData);
+      
+      if (!updatedUser) {
+        return res.status(404).json({ message: 'User not found' });
+      }
       
       // Return updated user data (without password)
       const { password, ...safeUser } = updatedUser;
@@ -308,7 +310,7 @@ export async function createAuthAPI(): Promise<Router> {
         }
       });
     } catch (error) {
-      service.handleError(error, res, 'Failed to get authentication status');
+      service.handleError(error, res);
     }
   });
 
@@ -339,7 +341,7 @@ export async function createAuthAPI(): Promise<Router> {
         }
       });
     } catch (error) {
-      service.handleError(error, res, 'Failed to switch authentication method');
+      service.handleError(error, res);
     }
   });
 
@@ -372,7 +374,7 @@ export async function createAuthAPI(): Promise<Router> {
         }
       });
     } catch (error) {
-      service.handleError(error, res, 'Failed to update authentication configuration');
+      service.handleError(error, res);
     }
   });
 
@@ -468,7 +470,7 @@ export async function createAuthAPI(): Promise<Router> {
         }
       });
     } catch (error) {
-      service.handleError(error, res, 'Failed to create configuration backup');
+      service.handleError(error, res);
     }
   });
 
@@ -488,7 +490,7 @@ export async function createAuthAPI(): Promise<Router> {
       
       res.send(configString);
     } catch (error) {
-      service.handleError(error, res, 'Failed to export configuration');
+      service.handleError(error, res);
     }
   });
 

@@ -41,21 +41,19 @@ export async function createAdminAPI(): Promise<Router> {
           username: u.username, 
           name: u.name, 
           role: u.role,
-          status: u.status || 'active',
           createdAt: u.createdAt
         })),
         events: allEvents.map(e => ({ 
           id: e.id, 
           title: e.title, 
-          createdBy: e.createdBy,
-          createdAt: e.createdAt
+          createdBy: e.createdBy
         })),
         authentication: {
           isAuthenticated: req.isAuthenticated(),
           user: req.user ? {
-            id: (req.user as Record<string, unknown>).id,
-            username: (req.user as Record<string, unknown>).username,
-            role: (req.user as Record<string, unknown>).role
+            id: req.user.id,
+            username: req.user.username,
+            role: req.user.role
           } : null
         },
         system: {
@@ -146,7 +144,7 @@ export async function createAdminAPI(): Promise<Router> {
       const userId = req.validatedParams.id;
       
       // Set password change required flag
-      await storage.updateUser(userId, { password_change_required: true });
+      await storage.updateUser(userId, { passwordChangeRequired: true });
       
       res.json({ 
         message: 'Password reset initiated. User will be required to change password on next login.',
@@ -168,8 +166,8 @@ export async function createAdminAPI(): Promise<Router> {
       const analytics = {
         users: {
           total: users.length,
-          active: users.filter(u => u.status !== 'inactive').length,
-          pending: users.filter(u => u.status === 'pending').length,
+          active: users.filter(u => (u as any).status !== 'inactive').length,
+          pending: users.filter(u => (u as any).status === 'pending').length,
           byRole: users.reduce((acc, user) => {
             acc[user.role] = (acc[user.role] || 0) + 1;
             return acc;
@@ -178,7 +176,8 @@ export async function createAdminAPI(): Promise<Router> {
         events: {
           total: events.length,
           recentlyCreated: events.filter(e => {
-            const created = new Date(e.createdAt || Date.now());
+            // Use date field as fallback since createdAt may not exist in schema
+            const created = new Date((e as any).createdAt || e.date || Date.now());
             const weekAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
             return created > weekAgo;
           }).length

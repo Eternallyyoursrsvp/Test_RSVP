@@ -82,9 +82,6 @@ export function useEventManagement(eventId?: number) {
       notification.createOperation(true, `Event "${data.title}" created successfully.`);
       invalidateRelatedQueries(ApiEndpoints.EVENTS.BASE);
     },
-    onError: (error: any) => {
-      notification.createOperation(false, error.message || "Failed to create event.");
-    }
   });
   
   // Update an event (using shorthand patch function)
@@ -97,9 +94,6 @@ export function useEventManagement(eventId?: number) {
       notification.updateOperation(true, `Event "${data.title}" updated successfully.`);
       invalidateRelatedQueries(ApiEndpoints.EVENTS.BASE, data.id);
     },
-    onError: (error: any) => {
-      notification.updateOperation(false, error.message || "Failed to update event.");
-    }
   });
   
   // Delete an event (using apiOperations.delete)
@@ -111,9 +105,6 @@ export function useEventManagement(eventId?: number) {
       notification.deleteOperation(true, "Event deleted successfully.");
       invalidateRelatedQueries(ApiEndpoints.EVENTS.BASE);
     },
-    onError: (error: any) => {
-      notification.deleteOperation(false, error.message || "Failed to delete event.");
-    }
   });
   
   // Example of a custom API request with pagination
@@ -153,12 +144,6 @@ export function useEventManagement(eventId?: number) {
         description: "The test email was sent successfully."
       });
     },
-    onError: (error: any) => {
-      notification.error({
-        title: "Email Sending Failed",
-        description: error.message || "Failed to send test email."
-      });
-    }
   });
   
   return {

@@ -105,9 +105,7 @@ export async function ensureAdminUserExists(): Promise<void> {
         role: 'admin',
         passwordChangeRequired: true, // Force password change on first login
         emailVerified: false,
-        failedLoginAttempts: 0,
-        createdAt: new Date(),
-        updatedAt: new Date()
+        failedLoginAttempts: 0
       });
       
       // Display one-time credentials in logs (similar to magic link pattern)

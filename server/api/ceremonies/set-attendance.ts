@@ -16,7 +16,8 @@ export async function setGuestAttendance(req: Request, res: Response): Promise<v
     const guestId = parseInt(req.params.guestId, 10);
     
     if (isNaN(guestId)) {
-      return ResponseBuilder.badRequest(res, 'Invalid guest ID');
+      ResponseBuilder.badRequest(res, 'Invalid guest ID');
+      return;
     }
 
     // Handle both route patterns:
@@ -29,20 +30,23 @@ export async function setGuestAttendance(req: Request, res: Response): Promise<v
       // Route pattern: PUT /guests/:guestId/ceremonies/:ceremonyId/attendance
       ceremonyId = parseInt(req.params.ceremonyId, 10);
       if (isNaN(ceremonyId)) {
-        return ResponseBuilder.badRequest(res, 'Invalid ceremony ID');
+        ResponseBuilder.badRequest(res, 'Invalid ceremony ID');
+        return;
       }
       
       // For PUT route, attending status is in body
       const bodyValidation = z.object({ attending: z.boolean() }).safeParse(req.body);
       if (!bodyValidation.success) {
-        return ResponseBuilder.badRequest(res, 'Attending status is required', bodyValidation.error.errors);
+        ResponseBuilder.badRequest(res, 'Attending status is required', bodyValidation.error.errors);
+        return;
       }
       attending = bodyValidation.data.attending;
     } else {
       // Route pattern: POST /guests/:guestId/attendance
       const validationResult = SetAttendanceSchema.safeParse(req.body);
       if (!validationResult.success) {
-        return ResponseBuilder.badRequest(res, 'Invalid attendance data', validationResult.error.errors);
+        ResponseBuilder.badRequest(res, 'Invalid attendance data', validationResult.error.errors);
+        return;
       }
       ceremonyId = validationResult.data.ceremonyId;
       attending = validationResult.data.attending;

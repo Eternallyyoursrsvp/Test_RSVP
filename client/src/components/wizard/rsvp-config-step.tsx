@@ -61,7 +61,7 @@ export default function RsvpConfigStep({
         rsvpDeadlineDays: existingRsvpConfig.rsvpDeadlineDays ?? 30,
         autoReminderDays: existingRsvpConfig.autoReminderDays ?? [14, 7, 3],
         requiredFields: existingRsvpConfig.requiredFields ?? ["email", "phone", "dietaryRestrictions"],
-        rsvpStatuses: existingRsvpConfig.rsvpStatuses ?? ["Attending", "Not Attending", "Maybe"],
+        rsvpStatuses: (existingRsvpConfig as any).rsvpStatuses ?? ["Attending", "Not Attending", "Maybe"],
         accommodationMode: existingRsvpConfig.accommodationMode ?? "all",
         transportMode: existingRsvpConfig.transportMode ?? "draft",
       });

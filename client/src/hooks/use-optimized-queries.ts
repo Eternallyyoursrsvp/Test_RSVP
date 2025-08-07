@@ -50,7 +50,7 @@ export function useOptimizedGuests(eventId?: number, page = 1, filters = {}) {
     staleTime: 2 * 60 * 1000, // 2 minutes for guest data
     gcTime: 5 * 60 * 1000,
     refetchOnWindowFocus: false,
-    keepPreviousData: true, // Smooth pagination
+    placeholderData: (previousData) => previousData, // Smooth pagination
   });
 }
 

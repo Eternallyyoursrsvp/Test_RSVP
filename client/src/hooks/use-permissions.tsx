@@ -95,7 +95,7 @@ export const PermissionsProvider: React.FC<PermissionsProviderProps> = ({ childr
     },
     enabled: !!user,
     staleTime: 5 * 60 * 1000, // 5 minutes
-    cacheTime: 10 * 60 * 1000, // 10 minutes
+    gcTime: 10 * 60 * 1000, // 10 minutes
   });
 
   // Fallback role-based permissions when API is unavailable
@@ -173,14 +173,14 @@ export const PermissionsProvider: React.FC<PermissionsProviderProps> = ({ childr
     }
   };
 
-  const permissions = permissionsData?.permissions || (user ? getFallbackPermissions(user.role) : []);
-  const roles = permissionsData?.roles || (user ? [user.role] : []);
+  const permissions = (permissionsData as any)?.permissions || (user ? getFallbackPermissions(user.role) : []);
+  const roles = (permissionsData as any)?.roles || (user ? [user.role] : []);
 
   const hasPermission = (permission: Permission | Permission[]): boolean => {
     if (!user) return false;
     
     // Super admin has all permissions
-    if (user.role === 'super_admin') {
+    if ((user.role as string) === 'super_admin') {
       return true;
     }
     

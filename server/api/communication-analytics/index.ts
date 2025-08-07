@@ -101,7 +101,7 @@ router.get(
     } catch (error) {
       console.error('❌ Failed to get dashboard metrics:', error);
       res.status(500).json(responseBuilder.error(
-        'ANALYTICS_ERROR',
+        'INTERNAL_SERVER_ERROR',
         'Failed to retrieve dashboard metrics',
         error instanceof Error ? error.message : 'Unknown error'
       ));
@@ -131,7 +131,7 @@ router.get(
     } catch (error) {
       console.error('❌ Failed to get realtime stats:', error);
       res.status(500).json(responseBuilder.error(
-        'ANALYTICS_ERROR',
+        'INTERNAL_SERVER_ERROR',
         'Failed to retrieve realtime statistics',
         error instanceof Error ? error.message : 'Unknown error'
       ));
@@ -169,7 +169,7 @@ router.get(
     } catch (error) {
       console.error('❌ Failed to get channel metrics:', error);
       res.status(500).json(responseBuilder.error(
-        'ANALYTICS_ERROR',
+        'INTERNAL_SERVER_ERROR',
         'Failed to retrieve channel metrics',
         error instanceof Error ? error.message : 'Unknown error'
       ));
@@ -206,7 +206,7 @@ router.get(
     } catch (error) {
       console.error('❌ Failed to get time series data:', error);
       res.status(500).json(responseBuilder.error(
-        'ANALYTICS_ERROR',
+        'INTERNAL_SERVER_ERROR',
         'Failed to retrieve time series data',
         error instanceof Error ? error.message : 'Unknown error'
       ));
@@ -242,7 +242,7 @@ router.get(
     } catch (error) {
       console.error('❌ Failed to get audience insights:', error);
       res.status(500).json(responseBuilder.error(
-        'ANALYTICS_ERROR',
+        'INTERNAL_SERVER_ERROR',
         'Failed to retrieve audience insights',
         error instanceof Error ? error.message : 'Unknown error'
       ));
@@ -272,14 +272,14 @@ router.post(
       } else if (eventType === 'clicked') {
         if (!data.linkId || !data.url) {
           return res.status(400).json(responseBuilder.error(
-            'MISSING_DATA',
+            'BAD_REQUEST',
             'linkId and url are required for click tracking'
           ));
         }
         await analyticsService.trackEmailClick(messageId, data.linkId, data);
       } else {
         return res.status(400).json(responseBuilder.error(
-          'INVALID_EVENT_TYPE',
+          'BAD_REQUEST',
           'Event type must be "opened" or "clicked" for email tracking'
         ));
       }
@@ -294,7 +294,7 @@ router.post(
     } catch (error) {
       console.error('❌ Failed to track email event:', error);
       res.status(400).json(responseBuilder.error(
-        'TRACKING_FAILED',
+        'INTERNAL_SERVER_ERROR',
         'Failed to track email event',
         error instanceof Error ? error.message : 'Unknown error'
       ));
@@ -317,7 +317,7 @@ router.post(
       
       if (!['sent', 'delivered', 'read', 'failed'].includes(eventType)) {
         return res.status(400).json(responseBuilder.error(
-          'INVALID_EVENT_TYPE',
+          'BAD_REQUEST',
           'Event type must be "sent", "delivered", "read", or "failed" for WhatsApp tracking'
         ));
       }
@@ -342,7 +342,7 @@ router.post(
     } catch (error) {
       console.error('❌ Failed to track WhatsApp event:', error);
       res.status(400).json(responseBuilder.error(
-        'TRACKING_FAILED',
+        'INTERNAL_SERVER_ERROR',
         'Failed to track WhatsApp event',
         error instanceof Error ? error.message : 'Unknown error'
       ));

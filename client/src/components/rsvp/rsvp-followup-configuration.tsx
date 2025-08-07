@@ -392,8 +392,8 @@ export default function RsvpFollowupConfiguration() {
         emailTemplate: selectedTemplate.emailTemplate || "",
         whatsappTemplate: selectedTemplate.whatsappTemplate || "",
         sendImmediately: selectedTemplate.sendImmediately || true,
-        scheduledDate: selectedTemplate.scheduledDate ?? null,
-        scheduledTime: selectedTemplate.scheduledTime ?? null,
+        scheduledDate: selectedTemplate.scheduledDate || undefined,
+        scheduledTime: selectedTemplate.scheduledTime || undefined,
         enabled: selectedTemplate.enabled || true,
       });
     } else {

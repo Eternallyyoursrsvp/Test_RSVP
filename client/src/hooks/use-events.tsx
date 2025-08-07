@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { post, put, del } from "@/lib/api-utils"; // Using the consolidated API utilities
+import { get, post, put, del } from "@/lib/api-utils"; // Using the consolidated API utilities
 import { useToast } from "@/hooks/use-toast";
 import { InsertWeddingEvent } from "@shared/schema";
 
@@ -12,11 +12,12 @@ export function useEvents() {
   // Get all events
   const { data: events = [], isLoading: isLoadingEvents, isError: isEventsError } = useQuery({
     queryKey: ['/api/events-direct'],
+    queryFn: async () => get('/api/events'),
     retry: 1, // Limit retries to prevent infinite loops
     retryDelay: 1000,
     staleTime: 5000, // Cache for 5 seconds
     refetchOnWindowFocus: false, // Prevent excessive refetches
-    onError: (error) => {
+    onError: (error: Error) => {
       // Silent error handling - no console logging
     }
   });

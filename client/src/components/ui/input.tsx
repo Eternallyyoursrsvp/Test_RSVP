@@ -30,7 +30,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
       if (error && !isInvalid) {
         handleAccessibilityError(
           'Input has error message but isInvalid prop not set',
-          ref?.current || undefined
+          (ref && typeof ref === 'object') ? ref.current : undefined
         )
       }
     }, [error, isInvalid, handleAccessibilityError, ref])

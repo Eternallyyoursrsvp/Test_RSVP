@@ -61,14 +61,6 @@ export function useGuestsByEvent() {
         description: 'New guest was added successfully.',
       });
     },
-    onError: (error: Error) => {
-      console.error('Error creating guest:', error);
-      toast({
-        title: 'Failed to create guest',
-        description: error.message,
-        variant: 'destructive',
-      });
-    }
   });
   
   // Import guests from Excel
@@ -105,14 +97,6 @@ export function useGuestsByEvent() {
         description: `Imported ${data.guests.length} guests.`,
       });
     },
-    onError: (error: Error) => {
-      console.error('Error importing guests:', error);
-      toast({
-        title: 'Failed to import guests',
-        description: error.message,
-        variant: 'destructive',
-      });
-    }
   });
   
   // Export guests to Excel

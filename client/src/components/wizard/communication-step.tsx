@@ -1475,7 +1475,7 @@ export default function CommunicationStep({
 
         {/* Template Categories Accordion */}
         <div className="space-y-4">
-          {categories.map((category: TemplateCategory) => (
+          {categories.map((category) => (
             <Card key={category.id} className={`transition-all duration-200 ${category.color}`}>
               <Collapsible
                 open={expandedCategories.includes(category.id)}
@@ -1522,11 +1522,11 @@ export default function CommunicationStep({
                         }[channel];
 
                         return (
-                          <Card key={channel} className={`${channelConfig.color} bg-card/30`}>
+                          <Card key={channel} className={`${channelConfig?.color || ''} bg-card/30`}>
                             <CardHeader className="pb-3">
                               <div className="flex items-center gap-2">
-                                {channelConfig.icon}
-                                <CardTitle className="text-sm">{channelConfig.label}</CardTitle>
+                                {channelConfig?.icon}
+                                <CardTitle className="text-sm">{channelConfig?.label}</CardTitle>
                               </div>
                             </CardHeader>
                             <CardContent className="pt-0 space-y-2">

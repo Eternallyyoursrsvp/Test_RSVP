@@ -23,20 +23,23 @@ export async function updateCeremony(req: Request, res: Response): Promise<void>
     const ceremonyId = parseInt(req.params.id, 10);
     
     if (isNaN(ceremonyId)) {
-      return ResponseBuilder.badRequest(res, 'Invalid ceremony ID');
+      ResponseBuilder.badRequest(res, 'Invalid ceremony ID');
+      return;
     }
     
     // Validate request body
     const validationResult = UpdateCeremonySchema.safeParse(req.body);
     if (!validationResult.success) {
-      return ResponseBuilder.badRequest(res, 'Invalid ceremony update data', validationResult.error.errors);
+      ResponseBuilder.badRequest(res, 'Invalid ceremony update data', validationResult.error.errors);
+      return;
     }
 
     const updateData = validationResult.data;
 
     // Check if any data was provided
     if (Object.keys(updateData).length === 0) {
-      return ResponseBuilder.badRequest(res, 'No update data provided');
+      ResponseBuilder.badRequest(res, 'No update data provided');
+      return;
     }
 
     // Create service context

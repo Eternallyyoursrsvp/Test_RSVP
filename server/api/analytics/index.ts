@@ -15,6 +15,37 @@ const analyticsQuerySchema = z.object({
   days: z.string().optional().transform(val => val ? parseInt(val) : 30)
 });
 
+// Helper function to convert analytics data to CSV format
+function convertToCSV(data: any): string {
+  if (!data || typeof data !== 'object') return '';
+  
+  try {
+    // Simple CSV conversion for nested objects
+    const rows: string[] = [];
+    
+    // Add header
+    rows.push('Category,Metric,Value');
+    
+    // Recursively flatten object to CSV rows
+    function flattenObject(obj: any, prefix: string = '') {
+      for (const [key, value] of Object.entries(obj)) {
+        if (typeof value === 'object' && value !== null && !Array.isArray(value)) {
+          flattenObject(value, prefix ? `${prefix}.${key}` : key);
+        } else {
+          const category = prefix || 'General';
+          const csvValue = Array.isArray(value) ? value.length : String(value);
+          rows.push(`"${category}","${key}","${csvValue}"`);
+        }
+      }
+    }
+    
+    flattenObject(data);
+    return rows.join('\n');
+  } catch (error) {
+    return 'Error,Error,Failed to convert data to CSV';
+  }
+}
+
 export async function createAnalyticsAPI(): Promise<Router> {
   const router = express.Router();
   const service = new ModuleService('analytics');
@@ -194,7 +225,7 @@ export async function createAnalyticsAPI(): Promise<Router> {
         const { eventIds, metrics } = req.validatedBody;
         
         const comparisons = await Promise.all(
-          eventIds.map(async (eventId) => {
+          eventIds.map(async (eventId: number) => {
             const data: any = { eventId };
             
             if (metrics.includes('stats')) {
@@ -238,7 +269,7 @@ export async function createAnalyticsAPI(): Promise<Router> {
         
         if (format === 'csv') {
           // Convert to CSV format
-          const csvData = this.convertToCSV(dashboardData);
+          const csvData = convertToCSV(dashboardData);
           res.setHeader('Content-Type', 'text/csv');
           res.setHeader('Content-Disposition', `attachment; filename="analytics-${eventId}-${Date.now()}.csv"`);
           res.send(csvData);
@@ -256,23 +287,3 @@ export async function createAnalyticsAPI(): Promise<Router> {
   return router;
 }
 
-// Helper function to convert dashboard data to CSV
-function convertToCSV(data: any): string {
-  const rows = [];
-  
-  // Add stats
-  rows.push('Metric,Value');
-  Object.entries(data.stats).forEach(([key, value]) => {
-    rows.push(`${key},${value}`);
-  });
-  
-  rows.push(''); // Empty row
-  
-  // Add accommodation stats
-  rows.push('Hotel,Total Rooms,Allocated Rooms,Occupancy Rate');
-  data.accommodationStats.byHotel.forEach((hotel: any) => {
-    rows.push(`${hotel.hotelName},${hotel.totalRooms},${hotel.allocatedRooms},${hotel.occupancyRate}%`);
-  });
-  
-  return rows.join('\n');
-}
