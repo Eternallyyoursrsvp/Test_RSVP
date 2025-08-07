@@ -16,7 +16,15 @@
     "test:unit": "vitest run tests/unit",
     "test:e2e": "playwright test",
     "test:e2e:headed": "playwright test --headed",
-    "test:e2e:ui": "playwright test --ui"
+    "test:e2e:ui": "playwright test --ui",
+    "progressive:check": "node scripts/typescript-baseline.js check",
+    "progressive:update": "node scripts/typescript-baseline.js update",
+    "progressive:compare": "node scripts/typescript-baseline.js compare",
+    "progressive:report": "node scripts/typescript-baseline.js report",
+    "progressive:init": "node scripts/typescript-baseline.js init",
+    "progressive:validate": "npm run check && npm run progressive:check",
+    "progressive:commit": "npm run progressive:validate && git add . && git commit",
+    "constitution:status": "node scripts/typescript-baseline.js"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.37.0",

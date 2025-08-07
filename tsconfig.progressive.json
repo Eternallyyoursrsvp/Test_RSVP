@@ -1,0 +1,53 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    // Progressive TypeScript Development Constitution
+    // Gradual strictness enforcement for new development
+    
+    // Current baseline settings - maintain for existing code
+    "strict": true,
+    
+    // Progressive enhancements - these will be enabled gradually
+    "noImplicitReturns": false, // TODO: Enable after baseline cleanup
+    "noFallthroughCasesInSwitch": false, // TODO: Enable after baseline cleanup  
+    "noUncheckedIndexedAccess": false, // TODO: Enable for new files only
+    "exactOptionalPropertyTypes": false, // TODO: Future enhancement
+    
+    // Code quality improvements - warnings for now
+    "noUnusedLocals": false, // Handled by ESLint progressively
+    "noUnusedParameters": false, // Handled by ESLint progressively
+    "noPropertyAccessFromIndexSignature": false, // Future strict mode
+    
+    // Enhanced type checking for new development
+    "allowUmdGlobalAccess": false,
+    "allowJs": true, // Allow gradual migration
+    "checkJs": false, // Don't check legacy JS files
+    
+    // Performance optimizations
+    "incremental": true,
+    "tsBuildInfoFile": "./node_modules/typescript/progressive-tsbuildinfo"
+  },
+  
+  // Progressive enforcement zones
+  "include": [
+    "client/src/**/*", 
+    "shared/**/*", 
+    "server/**/*"
+  ],
+  
+  "exclude": [
+    "node_modules", 
+    "build", 
+    "dist", 
+    "**/*.test.ts",
+    // Temporarily exclude high-error files for gradual migration
+    "**/*.legacy.*"
+  ],
+  
+  // Future: New file requirements
+  // Files matching these patterns will require stricter checking
+  "compileOnSave": false,
+  "ts-node": {
+    "esm": true
+  }
+}
