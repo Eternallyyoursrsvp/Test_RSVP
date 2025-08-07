@@ -71,13 +71,6 @@ export default function RsvpSettings({ settings, eventId }: RsvpSettingsProps) {
       // Invalidate queries to refresh data
       queryClient.invalidateQueries({ queryKey: [`/api/event-settings/${eventId}`] });
     },
-    onError: (error) => {
-      toast({
-        title: "Failed to update settings",
-        description: error.message,
-        variant: "destructive",
-      });
-    },
     onSettled: () => {
       setIsSaving(false);
     },

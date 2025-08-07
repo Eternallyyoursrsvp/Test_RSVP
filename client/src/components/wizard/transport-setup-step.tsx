@@ -171,36 +171,36 @@ export default function TransportSetupStep({
     if (currentEvent && !isLoadingEvent) {
       console.log('Loading existing transport config:', currentEvent);
       form.reset({
-        transportMode: currentEvent.transportMode || PROVISION_MODES.NONE,
-        transportProviderName: currentEvent.transportProviderName || '',
-        transportProviderPhone: currentEvent.transportProviderContact || '',
-        transportProviderEmail: currentEvent.transportProviderEmail || '',
-        transportInstructions: currentEvent.transportInstructions || '',
-        transportSpecialDeals: currentEvent.transportSpecialDeals || '',
-        sendTravelUpdates: currentEvent.sendTravelUpdates ?? true,
-        notifyGuests: currentEvent.notifyGuests ?? true,
-        providesAirportPickup: currentEvent.providesAirportPickup ?? false,
-        providesVenueTransfers: currentEvent.providesVenueTransfers ?? true,
-        transportPickupNote: currentEvent.transportPickupNote || '',
-        transportReturnNote: currentEvent.transportReturnNote || '',
+        transportMode: (currentEvent as any).transportMode || PROVISION_MODES.NONE,
+        transportProviderName: (currentEvent as any).transportProviderName || '',
+        transportProviderPhone: (currentEvent as any).transportProviderContact || '',
+        transportProviderEmail: (currentEvent as any).transportProviderEmail || '',
+        transportInstructions: (currentEvent as any).transportInstructions || '',
+        transportSpecialDeals: (currentEvent as any).transportSpecialDeals || '',
+        sendTravelUpdates: (currentEvent as any).sendTravelUpdates ?? true,
+        notifyGuests: (currentEvent as any).notifyGuests ?? true,
+        providesAirportPickup: (currentEvent as any).providesAirportPickup ?? false,
+        providesVenueTransfers: (currentEvent as any).providesVenueTransfers ?? true,
+        transportPickupNote: (currentEvent as any).transportPickupNote || '',
+        transportReturnNote: (currentEvent as any).transportReturnNote || '',
         // Flight coordination
-        flightMode: currentEvent.flightMode || "none",
-        flightInstructions: currentEvent.flightInstructions || '',
-        flightSpecialDeals: currentEvent.flightSpecialDeals || '',
-        recommendedAirlines: currentEvent.recommendedAirlines || '',
-        airlineDiscountCodes: currentEvent.airlineDiscountCodes || '',
-        offerTravelAssistance: currentEvent.offerTravelAssistance ?? false,
+        flightMode: (currentEvent as any).flightMode || "none",
+        flightInstructions: (currentEvent as any).flightInstructions || '',
+        flightSpecialDeals: (currentEvent as any).flightSpecialDeals || '',
+        recommendedAirlines: (currentEvent as any).recommendedAirlines || '',
+        airlineDiscountCodes: (currentEvent as any).airlineDiscountCodes || '',
+        offerTravelAssistance: (currentEvent as any).offerTravelAssistance ?? false,
         // Buffer time fields (convert from old hour fields if needed)
-        departureBufferTime: currentEvent.departureBufferTime || 
-          (currentEvent.departureBufferHours ? `${String(currentEvent.departureBufferHours).padStart(2, '0')}:00` : "03:00"),
-        arrivalBufferTime: currentEvent.arrivalBufferTime || 
-          (currentEvent.arrivalBufferHours ? `${String(currentEvent.arrivalBufferHours).padStart(2, '0')}:00` : "00:30"),
+        departureBufferTime: (currentEvent as any).departureBufferTime || 
+          ((currentEvent as any).departureBufferHours ? `${String((currentEvent as any).departureBufferHours).padStart(2, '0')}:00` : "03:00"),
+        arrivalBufferTime: (currentEvent as any).arrivalBufferTime || 
+          ((currentEvent as any).arrivalBufferHours ? `${String((currentEvent as any).arrivalBufferHours).padStart(2, '0')}:00` : "00:30"),
       });
       
       // Load vehicles if any saved
-      if (currentEvent.transportVehicles) {
+      if ((currentEvent as any).transportVehicles) {
         try {
-          const savedVehicles = JSON.parse(currentEvent.transportVehicles);
+          const savedVehicles = JSON.parse((currentEvent as any).transportVehicles);
           if (Array.isArray(savedVehicles) && savedVehicles.length > 0) {
             setVehicles(savedVehicles);
           }
@@ -839,7 +839,7 @@ export default function TransportSetupStep({
                   <dd>
                     <Badge variant="outline" className="ml-2">
                       {(() => {
-                        switch (currentEvent?.transportMode) {
+                        switch ((currentEvent as any)?.transportMode) {
                           case PROVISION_MODES.ALL:
                             return "Provided for all guests";
                           case PROVISION_MODES.SELECTED:
@@ -854,29 +854,29 @@ export default function TransportSetupStep({
                   </dd>
                 </div>
                 
-                {currentEvent?.transportMode !== PROVISION_MODES.NONE && (
+                {(currentEvent as any)?.transportMode !== PROVISION_MODES.NONE && (
                   <>
-                    {currentEvent?.transportProviderName && (
+                    {(currentEvent as any)?.transportProviderName && (
                       <div className="flex flex-col sm:flex-row sm:justify-between pb-2 border-b">
                         <dt className="font-medium">Provider:</dt>
-                        <dd>{currentEvent.transportProviderName}</dd>
+                        <dd>{(currentEvent as any).transportProviderName}</dd>
                       </div>
                     )}
                     
                     <div className="flex flex-col sm:flex-row sm:justify-between pb-2 border-b">
                       <dt className="font-medium">Transport Features:</dt>
                       <dd className="flex flex-wrap gap-2">
-                        {currentEvent?.providesAirportPickup && (
+                        {(currentEvent as any)?.providesAirportPickup && (
                           <Badge className="bg-blue-100 text-blue-800 hover:bg-blue-100">
                             Airport Pickup
                           </Badge>
                         )}
-                        {currentEvent?.providesVenueTransfers && (
+                        {(currentEvent as any)?.providesVenueTransfers && (
                           <Badge className="bg-green-100 text-green-800 hover:bg-green-100">
                             Venue Transfers
                           </Badge>
                         )}
-                        {!currentEvent?.providesAirportPickup && !currentEvent?.providesVenueTransfers && (
+                        {!(currentEvent as any)?.providesAirportPickup && !(currentEvent as any)?.providesVenueTransfers && (
                           <span className="text-muted-foreground">None specified</span>
                         )}
                       </dd>
@@ -902,7 +902,7 @@ export default function TransportSetupStep({
                     <div className="flex flex-col sm:flex-row sm:justify-between">
                       <dt className="font-medium">Guest Notifications:</dt>
                       <dd>
-                        {currentEvent?.notifyGuests ? (
+                        {(currentEvent as any)?.notifyGuests ? (
                           <Badge variant="outline" className="bg-green-50 text-green-700">
                             <Check className="h-3 w-3 mr-1" /> Enabled
                           </Badge>
@@ -929,7 +929,7 @@ export default function TransportSetupStep({
                     <dd>
                       <Badge variant="outline" className="ml-2">
                         {(() => {
-                          switch (currentEvent?.flightMode) {
+                          switch ((currentEvent as any)?.flightMode) {
                             case "collect_details":
                               return "Collect flight details from guests";
                             case "provide_selected":
@@ -944,37 +944,37 @@ export default function TransportSetupStep({
                     </dd>
                   </div>
                   
-                  {currentEvent?.flightMode !== "none" && (
+                  {(currentEvent as any)?.flightMode !== "none" && (
                     <>
-                      {(currentEvent?.departureBufferTime || currentEvent?.arrivalBufferTime) && (
+                      {((currentEvent as any)?.departureBufferTime || (currentEvent as any)?.arrivalBufferTime) && (
                         <div className="flex flex-col sm:flex-row sm:justify-between pb-2 border-b">
                           <dt className="font-medium">Buffer Times:</dt>
                           <dd className="flex flex-wrap gap-2">
-                            {currentEvent?.departureBufferTime && (
+                            {(currentEvent as any)?.departureBufferTime && (
                               <Badge variant="outline" className="bg-blue-50 text-blue-700">
-                                Departure: {currentEvent.departureBufferTime}
+                                Departure: {(currentEvent as any).departureBufferTime}
                               </Badge>
                             )}
-                            {currentEvent?.arrivalBufferTime && (
+                            {(currentEvent as any)?.arrivalBufferTime && (
                               <Badge variant="outline" className="bg-green-50 text-green-700">
-                                Arrival: {currentEvent.arrivalBufferTime}
+                                Arrival: {(currentEvent as any).arrivalBufferTime}
                               </Badge>
                             )}
                           </dd>
                         </div>
                       )}
                       
-                      {currentEvent?.recommendedAirlines && (
+                      {(currentEvent as any)?.recommendedAirlines && (
                         <div className="flex flex-col sm:flex-row sm:justify-between pb-2 border-b">
                           <dt className="font-medium">Recommended Airlines:</dt>
-                          <dd className="text-sm">{currentEvent.recommendedAirlines}</dd>
+                          <dd className="text-sm">{(currentEvent as any).recommendedAirlines}</dd>
                         </div>
                       )}
                       
-                      {currentEvent?.flightInstructions && (
+                      {(currentEvent as any)?.flightInstructions && (
                         <div className="flex flex-col sm:flex-row sm:justify-between">
                           <dt className="font-medium">Instructions:</dt>
-                          <dd className="text-sm max-w-md">{currentEvent.flightInstructions}</dd>
+                          <dd className="text-sm max-w-md">{(currentEvent as any).flightInstructions}</dd>
                         </div>
                       )}
                     </>

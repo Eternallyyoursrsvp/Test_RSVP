@@ -154,13 +154,6 @@ export default function OAuthConfiguration({ settings, eventId }: OAuthConfigura
       // Invalidate the settings query to refresh the data
       queryClient.invalidateQueries({ queryKey: [`/api/event-settings/${eventId}/settings`] });
     },
-    onError: (error) => {
-      toast({
-        title: "Failed to update configuration",
-        description: error.message,
-        variant: "destructive",
-      });
-    },
   });
 
   // Handle input changes

@@ -28,7 +28,7 @@ export async function setGuestAttendance(req: Request, res: Response): Promise<v
 
     // Verify guest exists
     const guest = await db.query.guests.findFirst({
-      where: (guests, { eq }) => eq(guests.id, guestId)
+      where: (guests: any, { eq }: any) => eq(guests.id, guestId)
     });
 
     if (!guest) {
@@ -37,7 +37,7 @@ export async function setGuestAttendance(req: Request, res: Response): Promise<v
 
     // Verify ceremony exists and belongs to the same event
     const ceremony = await db.query.ceremonies.findFirst({
-      where: (ceremonies, { eq, and }) => and(
+      where: (ceremonies: any, { eq, and }: any) => and(
         eq(ceremonies.id, ceremonyId),
         eq(ceremonies.eventId, guest.eventId)
       )
@@ -49,7 +49,7 @@ export async function setGuestAttendance(req: Request, res: Response): Promise<v
 
     // Check if guest-ceremony relation exists
     const existingRelation = await db.query.guestCeremonies.findFirst({
-      where: (guestCeremonies, { eq, and }) => and(
+      where: (guestCeremonies: any, { eq, and }: any) => and(
         eq(guestCeremonies.guestId, guestId),
         eq(guestCeremonies.ceremonyId, ceremonyId)
       )

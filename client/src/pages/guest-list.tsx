@@ -262,7 +262,7 @@ function GuestList() {
     enabled: !!eventId,
   });
 
-  const guests = masterGuestResponse.guests || [];
+  const guests = (masterGuestResponse as any).guests || [];
 
   // Enhanced guest statistics with master data integration
   const { data: guestStats = null } = useQuery({
@@ -317,15 +317,15 @@ function GuestList() {
           
           // Integration with wizard configuration
           wizardConfig: {
-            accommodationMode: eventConfig?.accommodationMode || 'none',
-            transportMode: eventConfig?.transportMode || 'none', 
-            flightMode: eventConfig?.flightMode || 'none',
-            showAccommodationStats: eventConfig?.accommodationMode !== 'none',
-            showTravelStats: (eventConfig?.transportMode !== 'none') || (eventConfig?.flightMode !== 'none'),
+            accommodationMode: (eventConfig as any)?.accommodationMode || 'none',
+            transportMode: (eventConfig as any)?.transportMode || 'none', 
+            flightMode: (eventConfig as any)?.flightMode || 'none',
+            showAccommodationStats: (eventConfig as any)?.accommodationMode !== 'none',
+            showTravelStats: ((eventConfig as any)?.transportMode !== 'none') || ((eventConfig as any)?.flightMode !== 'none'),
             rsvpStage1Enabled: true, // Always enabled
-            rsvpStage2Enabled: eventConfig?.accommodationMode !== 'none' || 
-                              eventConfig?.transportMode !== 'none' || 
-                              eventConfig?.flightMode !== 'none'
+            rsvpStage2Enabled: (eventConfig as any)?.accommodationMode !== 'none' || 
+                              (eventConfig as any)?.transportMode !== 'none' || 
+                              (eventConfig as any)?.flightMode !== 'none'
           }
         };
         

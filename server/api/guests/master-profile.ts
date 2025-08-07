@@ -37,7 +37,7 @@ export async function createMasterGuestProfileAPI(): Promise<Router> {
         const [guest, accommodations, travelInfo, communications] = await Promise.all([
           storage.getGuest(guestId),
           storage.getAccommodationsByEvent(eventId).then(accs => accs.filter(acc => acc.guestId === guestId)),
-          storage.getTravelInfoByEvent(eventId).then(travels => travels.filter(travel => travel.guestId === guestId)),
+          storage.getTravelInfoByEvent(eventId).then((travels: any) => travels.filter((travel: any) => travel.guestId === guestId)),
           getMockCommunications(guestId) // Mock for Phase 2
         ]);
 
@@ -163,7 +163,7 @@ export async function createMasterGuestProfileAPI(): Promise<Router> {
         const [guest, accommodations, travelInfo, communications] = await Promise.all([
           storage.getGuest(guestId),
           storage.getAccommodationsByEvent(eventId).then(accs => accs.filter(acc => acc.guestId === guestId)),
-          storage.getTravelInfoByEvent(eventId).then(travels => travels.filter(travel => travel.guestId === guestId)),
+          storage.getTravelInfoByEvent(eventId).then((travels: any) => travels.filter((travel: any) => travel.guestId === guestId)),
           getMockCommunications(guestId)
         ]);
 

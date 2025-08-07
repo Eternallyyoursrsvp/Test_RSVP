@@ -270,10 +270,10 @@ export default function Events() {
   
   // Handle ceremony form submission
   const onSubmitCeremonyForm = (data: z.infer<typeof ceremonyFormSchema>) => {
-    const event = events.find(e => e.id === selectedEventId);
+    const event = (events as any[]).find((e: any) => e.id === selectedEventId);
     const ceremonyDate = new Date(data.date);
-    const eventStartDate = new Date(event?.startDate || '');
-    const eventEndDate = new Date(event?.endDate || '');
+    const eventStartDate = new Date((event as any)?.startDate || '');
+    const eventEndDate = new Date((event as any)?.endDate || '');
     
     if (ceremonyDate < eventStartDate || ceremonyDate > eventEndDate) {
       return new Promise((resolve) => {
@@ -288,7 +288,7 @@ export default function Events() {
                 <AlertDialogDescription className="space-y-3">
                   <p>The ceremony date ({formatDateForDisplay(data.date)}) is outside the wedding event dates:</p>
                   <p className="font-medium text-primary font-serif text-lg">
-                    {formatDateForDisplay(event?.startDate)} to {formatDateForDisplay(event?.endDate)}
+                    {formatDateForDisplay((event as any)?.startDate)} to {formatDateForDisplay((event as any)?.endDate)}
                   </p>
                   <p>Would you like to proceed with creating this ceremony?</p>
                 </AlertDialogDescription>
@@ -481,7 +481,7 @@ export default function Events() {
             <p className="text-muted-foreground">Loading your events...</p>
           </div>
         </div>
-      ) : events.isError ? (
+      ) : (events as any).isError ? (
         <Card>
           <CardContent className="flex flex-col items-center justify-center py-12">
             <AlertCircle className="h-12 w-12 text-muted-foreground mb-4" />
@@ -598,10 +598,10 @@ export default function Events() {
           <DialogContent className="max-w-4xl">
             <DialogHeader>
               <DialogTitle className="text-2xl font-playfair">
-                {events.find(e => e.id === selectedEventId)?.title}
+                {(events as any[]).find((e: any) => e.id === selectedEventId)?.title}
               </DialogTitle>
               <DialogDescription className="font-script text-lg text-primary">
-                {events.find(e => e.id === selectedEventId)?.coupleNames}
+                {(events as any[]).find((e: any) => e.id === selectedEventId)?.coupleNames}
               </DialogDescription>
             </DialogHeader>
             
@@ -623,14 +623,14 @@ export default function Events() {
                       <div>
                         <p className="text-sm text-muted-foreground">Event Dates</p>
                         <p className="font-medium">
-                          {formatDateForDisplay(events.find(e => e.id === selectedEventId)?.startDate)} 
+                          {formatDateForDisplay((events as any[]).find((e: any) => e.id === selectedEventId)?.startDate)} 
                           {" - "} 
-                          {formatDateForDisplay(events.find(e => e.id === selectedEventId)?.endDate)}
+                          {formatDateForDisplay((events as any[]).find((e: any) => e.id === selectedEventId)?.endDate)}
                         </p>
                       </div>
                       <div>
                         <p className="text-sm text-muted-foreground">Location</p>
-                        <p className="font-medium">{events.find(e => e.id === selectedEventId)?.location}</p>
+                        <p className="font-medium">{(events as any[]).find((e: any) => e.id === selectedEventId)?.location}</p>
                       </div>
                     </div>
                   </div>
@@ -640,7 +640,7 @@ export default function Events() {
                   <div>
                     <h3 className="text-lg font-medium mb-2">Description</h3>
                     <p className="text-muted-foreground">
-                      {events.find(e => e.id === selectedEventId)?.description || "No description provided"}
+                      {(events as any[]).find((e: any) => e.id === selectedEventId)?.description || "No description provided"}
                     </p>
                   </div>
                   

@@ -87,7 +87,7 @@ export function useNotification() {
       title: options.title,
       description: options.description,
       duration: options.duration || 3000,
-      action: options.action,
+      action: options.action as any,
     });
   };
 

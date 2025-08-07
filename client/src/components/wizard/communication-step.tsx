@@ -921,7 +921,7 @@ export default function CommunicationStep({
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-3">
-            {emailProviders.map((provider: ProviderStatus) => (
+            {providers.filter(p => p.type === 'email').map((provider: ProviderStatus) => (
               <div key={provider.id} className="flex items-center justify-between p-4 rounded-lg border hover:bg-gray-50 transition-colors">
                 <div className="flex items-center gap-3">
                   <div className={provider.color}>
@@ -989,7 +989,7 @@ export default function CommunicationStep({
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-3">
-            {smsProviders.map((provider: ProviderStatus) => (
+            {providers.filter(p => p.type === 'sms').map((provider: ProviderStatus) => (
               <div key={provider.id} className="flex items-center justify-between p-4 rounded-lg border hover:bg-gray-50 transition-colors">
                 <div className="flex items-center gap-3">
                   <div className={provider.color}>
@@ -1150,7 +1150,7 @@ export default function CommunicationStep({
               <>
                 <div className="bg-white p-4 rounded-lg border shadow-lg">
                   <QRCode 
-                    value={qrCodeData} 
+                    value={qrCodeData || ''} 
                     size={200}
                     bgColor="#ffffff"
                     fgColor="#000000"
@@ -2110,7 +2110,7 @@ export default function CommunicationStep({
               <>
                 <div className="bg-white p-4 rounded-lg border shadow-lg">
                   <QRCode 
-                    value={qrCodeData} 
+                    value={qrCodeData || ''} 
                     size={200}
                     bgColor="#ffffff"
                     fgColor="#000000"
@@ -2185,7 +2185,7 @@ export default function CommunicationStep({
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-3">
-            {emailProviders.map((provider: ProviderStatus) => (
+            {providers.filter(p => p.type === 'email').map((provider: ProviderStatus) => (
               <div key={provider.id} className="flex items-center justify-between p-4 rounded-lg border hover:bg-gray-50 transition-colors">
                 <div className="flex items-center gap-3">
                   <div className={provider.color}>
@@ -2253,7 +2253,7 @@ export default function CommunicationStep({
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-3">
-            {smsProviders.map((provider: ProviderStatus) => (
+            {providers.filter(p => p.type === 'sms').map((provider: ProviderStatus) => (
               <div key={provider.id} className="flex items-center justify-between p-4 rounded-lg border hover:bg-gray-50 transition-colors">
                 <div className="flex items-center gap-3">
                   <div className={provider.color}>

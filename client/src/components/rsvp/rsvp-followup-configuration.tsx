@@ -81,8 +81,8 @@ const templateFormSchema = z.object({
   emailTemplate: z.string().min(1, "Email template is required"),
   whatsappTemplate: z.string().optional(),
   sendImmediately: z.boolean().default(true),
-  scheduledDate: z.string().optional().nullable(),
-  scheduledTime: z.string().optional().nullable(),
+  scheduledDate: z.string().optional(),
+  scheduledTime: z.string().optional(),
   enabled: z.boolean().default(true),
 });
 

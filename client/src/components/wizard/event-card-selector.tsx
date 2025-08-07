@@ -23,13 +23,6 @@ export default function EventCardSelector({ onSelectEvent }: EventCardSelectorPr
     retry: 1, // Only retry once to avoid excessive retries
     staleTime: 5000, // Cache for 5 seconds to prevent rapid refetches
     refetchOnWindowFocus: false, // Prevent refetch on window focus
-    onError: () => {
-      toast({
-        title: "Couldn't retrieve events",
-        description: "There was an issue loading your events. You can create your first event to get started.",
-        variant: "destructive",
-      });
-    }
   });
   
   // Set current event mutation

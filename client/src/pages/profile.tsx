@@ -258,7 +258,7 @@ export default function ProfilePage() {
                     <Label className="text-xs font-medium text-muted-foreground">ASSIGNED ROLES</Label>
                     <div className="flex flex-wrap gap-1 mt-1">
                       {userRoles && userRoles.length > 0 ? (
-                        userRoles.map((role, index) => (
+                        userRoles.map((role: string, index: number) => (
                           <Badge key={index} variant="outline" className="text-xs">
                             {role}
                           </Badge>

@@ -99,7 +99,7 @@ export async function importGuests(req: Request, res: Response): Promise<void> {
           .on('end', () => {
             resolve();
           })
-          .on('error', (error) => {
+          .on('error', (error: any) => {
             reject(error);
           });
       });

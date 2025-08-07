@@ -244,14 +244,14 @@ export default function HotelsStep({
     if (currentEvent && !hotelsLoading && !accommodationsLoading) {
       form.reset({
         accommodationMode: currentEvent.accommodationMode || PROVISION_MODES.BLOCK,
-        enableAutoAllocation: currentEvent.enableAutoAllocation ?? true,
-        enableGuestRoomPreferences: currentEvent.enableGuestRoomPreferences ?? true,
-        allocationStrategy: currentEvent.allocationStrategy || "family",
+        enableAutoAllocation: (currentEvent as any).enableAutoAllocation ?? true,
+        enableGuestRoomPreferences: (currentEvent as any).enableGuestRoomPreferences ?? true,
+        allocationStrategy: (currentEvent as any).allocationStrategy || "family",
         hotels: hotels,
         roomTypes: roomTypes,
-        currency: currentEvent.currency || 'INR',
-        showPricing: currentEvent.showPricing ?? false,
-        accommodationAttachmentUrl: currentEvent.accommodationAttachmentUrl || '',
+        currency: (currentEvent as any).currency || 'INR',
+        showPricing: (currentEvent as any).showPricing ?? false,
+        accommodationAttachmentUrl: (currentEvent as any).accommodationAttachmentUrl || '',
         accommodationSpecialDeals: currentEvent.accommodationSpecialDeals || '',
         accommodationInstructions: currentEvent.accommodationInstructions || '',
       });

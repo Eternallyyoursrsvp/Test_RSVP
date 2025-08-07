@@ -43,12 +43,12 @@ export default function Dashboard() {
     if (!stats || stats.total === 0) return [];
     
     return [
-      { name: "Jan", responses: Math.floor(stats.confirmed * 0.1) },
-      { name: "Feb", responses: Math.floor(stats.confirmed * 0.2) },
-      { name: "Mar", responses: Math.floor(stats.confirmed * 0.4) },
-      { name: "Apr", responses: Math.floor(stats.confirmed * 0.6) },
-      { name: "May", responses: Math.floor(stats.confirmed * 0.8) },
-      { name: "Jun", responses: stats.confirmed },
+      { date: "Jan", value: Math.floor(stats.confirmed * 0.1) },
+      { date: "Feb", value: Math.floor(stats.confirmed * 0.2) },
+      { date: "Mar", value: Math.floor(stats.confirmed * 0.4) },
+      { date: "Apr", value: Math.floor(stats.confirmed * 0.6) },
+      { date: "May", value: Math.floor(stats.confirmed * 0.8) },
+      { date: "Jun", value: stats.confirmed },
     ];
   };
   

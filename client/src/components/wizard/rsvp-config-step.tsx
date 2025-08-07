@@ -55,15 +55,15 @@ export default function RsvpConfigStep({
     if (existingRsvpConfig && !rsvpLoading) {
       console.log('Loading existing RSVP config:', existingRsvpConfig);
       setRsvpSettings({
-        enablePlusOne: existingRsvpConfig.allowPlusOne ?? true,
-        enableMealSelection: existingRsvpConfig.enableMealSelection ?? true,
-        enableCustomMessages: existingRsvpConfig.enableCustomMessages ?? true,
-        rsvpDeadlineDays: existingRsvpConfig.rsvpDeadlineDays ?? 30,
-        autoReminderDays: existingRsvpConfig.autoReminderDays ?? [14, 7, 3],
-        requiredFields: existingRsvpConfig.requiredFields ?? ["email", "phone", "dietaryRestrictions"],
+        enablePlusOne: (existingRsvpConfig as any).allowPlusOne ?? true,
+        enableMealSelection: (existingRsvpConfig as any).enableMealSelection ?? true,
+        enableCustomMessages: (existingRsvpConfig as any).enableCustomMessages ?? true,
+        rsvpDeadlineDays: (existingRsvpConfig as any).rsvpDeadlineDays ?? 30,
+        autoReminderDays: (existingRsvpConfig as any).autoReminderDays ?? [14, 7, 3],
+        requiredFields: (existingRsvpConfig as any).requiredFields ?? ["email", "phone", "dietaryRestrictions"],
         rsvpStatuses: (existingRsvpConfig as any).rsvpStatuses ?? ["Attending", "Not Attending", "Maybe"],
-        accommodationMode: existingRsvpConfig.accommodationMode ?? "all",
-        transportMode: existingRsvpConfig.transportMode ?? "draft",
+        accommodationMode: (existingRsvpConfig as any).accommodationMode ?? "all",
+        transportMode: (existingRsvpConfig as any).transportMode ?? "draft",
       });
     }
   }, [existingRsvpConfig, rsvpLoading]);

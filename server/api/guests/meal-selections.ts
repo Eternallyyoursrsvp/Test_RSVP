@@ -28,7 +28,7 @@ export async function setGuestMealSelection(req: Request, res: Response): Promis
 
     // Verify guest exists
     const guest = await db.query.guests.findFirst({
-      where: (guests, { eq }) => eq(guests.id, guestId)
+      where: (guests: any, { eq }: any) => eq(guests.id, guestId)
     });
 
     if (!guest) {
@@ -37,7 +37,7 @@ export async function setGuestMealSelection(req: Request, res: Response): Promis
 
     // Verify ceremony exists and belongs to the same event
     const ceremony = await db.query.ceremonies.findFirst({
-      where: (ceremonies, { eq, and }) => and(
+      where: (ceremonies: any, { eq, and }: any) => and(
         eq(ceremonies.id, ceremonyId),
         eq(ceremonies.eventId, guest.eventId)
       )
@@ -49,7 +49,7 @@ export async function setGuestMealSelection(req: Request, res: Response): Promis
 
     // Verify meal option exists and belongs to the same event
     const mealOption = await db.query.mealOptions.findFirst({
-      where: (mealOptions, { eq, and }) => and(
+      where: (mealOptions: any, { eq, and }: any) => and(
         eq(mealOptions.id, mealOptionId),
         eq(mealOptions.eventId, guest.eventId)
       )
@@ -61,7 +61,7 @@ export async function setGuestMealSelection(req: Request, res: Response): Promis
 
     // Check if meal selection already exists for this guest and ceremony
     const existingSelection = await db.query.guestMealSelections.findFirst({
-      where: (guestMealSelections, { eq, and }) => and(
+      where: (guestMealSelections: any, { eq, and }: any) => and(
         eq(guestMealSelections.guestId, guestId),
         eq(guestMealSelections.ceremonyId, ceremonyId)
       )
