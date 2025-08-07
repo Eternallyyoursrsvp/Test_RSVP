@@ -243,8 +243,8 @@ export default function RsvpFollowupConfiguration() {
       emailTemplate: "",
       whatsappTemplate: "",
       sendImmediately: true,
-      scheduledDate: null,
-      scheduledTime: null,
+      scheduledDate: undefined,
+      scheduledTime: undefined,
       enabled: true,
     },
   });
@@ -403,8 +403,8 @@ export default function RsvpFollowupConfiguration() {
         emailTemplate: "",
         whatsappTemplate: "",
         sendImmediately: true,
-        scheduledDate: null,
-        scheduledTime: null,
+        scheduledDate: undefined,
+        scheduledTime: undefined,
         enabled: true,
       });
     }

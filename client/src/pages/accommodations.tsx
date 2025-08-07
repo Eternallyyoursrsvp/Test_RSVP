@@ -89,12 +89,12 @@ export default function Accommodations() {
   const handleExportAssignments = async () => {
     try {
       // Fetch room allocations for this event
-      const response = await get(ApiEndpoints.ROOM_ALLOCATIONS.BY_EVENT(eventId));
+      const response = await get(ApiEndpoints.ROOM_ALLOCATIONS.BY_EVENT(eventId!));
       const allocations = response.data || [];
       
       // Format data and export
-      const data = formatHotelAssignmentsForExport(allocations, hotels, accommodations);
-      exportToExcel(data, `hotel-assignments-event-${eventId}`);
+      const data = await formatHotelAssignmentsForExport(allocations, hotels, accommodations);
+      exportToExcel(data as any, `hotel-assignments-event-${eventId}`);
       
       toast({
         title: "Export Successful",

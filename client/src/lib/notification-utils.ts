@@ -4,7 +4,8 @@
  * This file provides standardized notification functions to ensure consistent
  * user feedback throughout the application.
  */
-import { useToast, type Toast } from "@/hooks/use-toast";
+import { useToast } from "@/hooks/use-toast";
+import type { ToastProps } from "@/components/ui/toast";
 
 // Common notification types
 export type NotificationType = 'success' | 'error' | 'warning' | 'info';

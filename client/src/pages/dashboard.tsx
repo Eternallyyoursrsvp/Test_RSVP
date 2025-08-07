@@ -36,7 +36,7 @@ export default function Dashboard() {
   const guests = dashboardData?.guests || [];
   const stats = dashboardData?.stats;
   const ceremonies = dashboardData?.ceremonies || [];
-  const accommodations = [];
+  const accommodations: any[] = [];
   
   // Helper function to generate RSVP progress data from statistics
   const generateRsvpProgressData = () => {
@@ -215,7 +215,7 @@ export default function Dashboard() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
         <div className="lg:col-span-2">
           <RsvpChart 
-            data={generateRsvpProgressData(chartPeriod)} 
+            data={generateRsvpProgressData()} 
             period={chartPeriod}
             onPeriodChange={setChartPeriod}
           />
