@@ -58,10 +58,11 @@ export default function BrandedRsvpLayout({
   });
 
   // Generate dynamic styles based on brand assets
+  // Fallback to CSS custom properties for brand consistency
   const brandColors = brandAssets?.colorPalette || {
-    primary: "#7A51E1",
-    secondary: "#E3C76F",
-    accent: "#F8FAFC"
+    primary: "hsl(var(--primary))",
+    secondary: "hsl(var(--secondary))",
+    accent: "hsl(var(--accent))"
   };
 
   const logoUrl = brandAssets?.logoUrl;

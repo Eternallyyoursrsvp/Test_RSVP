@@ -1,6 +1,7 @@
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { formatDateForDisplay, formatDateTimeForDisplay } from "@/lib/date-utils";
+import { getStatusColorClasses } from "@/design-system";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -19,13 +20,13 @@ export function formatDateTime(date: string | Date | null | undefined): string {
 export function getRsvpStatusColor(status: string): string {
   switch (status.toLowerCase()) {
     case "confirmed":
-      return "text-green-700 bg-green-100 border-green-400";
+      return getStatusColorClasses("success");
     case "declined":
-      return "text-red-700 bg-red-100 border-red-400";
+      return getStatusColorClasses("error");
     case "pending":
-      return "text-yellow-700 bg-yellow-100 border-yellow-400";
+      return getStatusColorClasses("warning");
     default:
-      return "text-gray-700 bg-gray-100 border-gray-400";
+      return getStatusColorClasses("info");
   }
 }
 

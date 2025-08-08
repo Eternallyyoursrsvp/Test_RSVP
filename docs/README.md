@@ -50,6 +50,14 @@ docs/
 - System administration
 - All lower-level documentation
 
+**⚫ Developers**
+- System architecture and design
+- Implementation guides and status
+- Design system and UI patterns
+- Testing procedures and quality assurance
+- Development workflows and deployment
+- Technical system documentation
+
 ---
 
 ## 🚀 Quick Navigation
@@ -67,6 +75,16 @@ docs/
 - [**Platform Setup**](./super-admin-guides/platform-setup.md) - Initial platform configuration
 - [**Provider Management**](./super-admin-guides/provider-management.md) - Advanced provider settings
 - [**User Administration**](./super-admin-guides/user-management.md) - Managing platform users
+
+### For Developers
+- [**CLAUDE.md**](./CLAUDE.md) - Main development guide and project instructions
+- [**Architecture Guide**](./Architecture_Ver5_Comprehensive.md) - Complete system architecture
+- [**Implementation Status**](./IMPLEMENTATION_SUMMARY.md) - Current implementation progress
+- [**Design System**](./DESIGN_SYSTEM_INTEGRATION.md) - UI design system and token usage
+- [**Testing Guide**](./TESTING_GUIDE.md) - Testing strategies and procedures
+- [**Platform Workflow**](./Platform_Upgrade_Workflow.md) - Development and deployment processes
+- [**Authentication System**](./AUTHENTICATION_SYSTEM.md) - Authentication architecture
+- [**TypeScript Rules**](./TYPESCRIPT_PROGRESSIVE_RULES.md) - TypeScript conventions and rules
 
 ---
 

@@ -106,6 +106,251 @@
   --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.4);
   --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.5);
   --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.6);
+
+  /* ===========================================
+     COMPREHENSIVE DESIGN TOKEN SYSTEM - 100+ TOKENS
+     Complete enterprise design system from design-system/tokens.ts
+     Prefixed with --token- to avoid conflicts with existing system
+     =========================================== */
+  
+  /* Status Colors - Design System Tokens */
+  --token-success: 142 76% 36%;          /* #22c55e - Success green */
+  --token-warning: 32 95% 44%;           /* #f59e0b - Warning amber */
+  --token-error: 0 72% 51%;              /* #ef4444 - Error red */
+  --token-info: 221 83% 53%;             /* #3b82f6 - Info blue */
+  
+  /* Z-Index Management System */
+  --token-z-base: 1;
+  --token-z-content: 10;
+  --token-z-sticky: 100;
+  --token-z-fixed: 200;
+  --token-z-dropdown: 1000;
+  --token-z-tooltip: 1100;
+  --token-z-modal: 1200;
+  --token-z-popover: 1300;
+  --token-z-notification: 1400;
+  --token-z-loader: 9000;
+  --token-z-debug: 9900;
+  --token-z-max: 9999;
+  
+  /* Animation & Transition System */
+  --token-duration-fast: 150ms;
+  --token-duration-normal: 300ms;
+  --token-duration-slow: 500ms;
+  --token-duration-hover: 200ms;
+  --token-duration-modal: 300ms;
+  --token-duration-focus: 150ms;
+  --token-duration-tooltip: 100ms;
+  --token-duration-dropdown: 250ms;
+  --token-duration-slide: 350ms;
+  --token-duration-fade: 200ms;
+  
+  /* Easing Functions */
+  --token-easing-ease: cubic-bezier(0.4, 0, 0.2, 1);
+  --token-easing-in: cubic-bezier(0.4, 0, 1, 1);
+  --token-easing-out: cubic-bezier(0, 0, 0.2, 1);
+  --token-easing-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  --token-easing-elastic: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  --token-easing-sharp: cubic-bezier(0.4, 0.0, 0.6, 1.0);
+  --token-easing-standard: cubic-bezier(0.4, 0.0, 0.2, 1.0);
+  
+  /* Breakpoint System */
+  --token-breakpoint-xs: 0px;
+  --token-breakpoint-sm: 640px;
+  --token-breakpoint-md: 768px;
+  --token-breakpoint-lg: 1024px;
+  --token-breakpoint-xl: 1280px;
+  --token-breakpoint-xxl: 1536px;
+  
+  /* Grid & Layout System */
+  --token-grid-columns: 12;
+  --token-grid-gap-xs: 0.5rem;           /* 8px */
+  --token-grid-gap-sm: 1rem;             /* 16px */
+  --token-grid-gap-md: 1.5rem;           /* 24px */
+  --token-grid-gap-lg: 2rem;             /* 32px */
+  --token-grid-gap-xl: 3rem;             /* 48px */
+  --token-container-xs: 100%;
+  --token-container-sm: 640px;
+  --token-container-md: 768px;
+  --token-container-lg: 1024px;
+  --token-container-xl: 1280px;
+  --token-container-xxl: 1536px;
+  
+  /* Layout Dimensions */
+  --token-sidebar-width: 280px;
+  --token-sidebar-width-collapsed: 64px;
+  --token-header-height: 64px;
+  --token-footer-height: 80px;
+  
+  /* Extended Typography System */
+  --token-font-size-2xs: 0.625rem;       /* 10px */
+  --token-font-size-xs: 0.75rem;         /* 12px */
+  --token-font-size-sm: 0.875rem;        /* 14px */
+  --token-font-size-base: 1rem;          /* 16px */
+  --token-font-size-lg: 1.125rem;        /* 18px */
+  --token-font-size-xl: 1.25rem;         /* 20px */
+  --token-font-size-2xl: 1.5rem;         /* 24px */
+  --token-font-size-3xl: 1.875rem;       /* 30px */
+  --token-font-size-4xl: 2.25rem;        /* 36px */
+  --token-font-size-5xl: 3rem;           /* 48px */
+  --token-font-size-6xl: 3.75rem;        /* 60px */
+  --token-font-size-7xl: 4.5rem;         /* 72px */
+  --token-font-size-8xl: 6rem;           /* 96px */
+  --token-font-size-9xl: 8rem;           /* 128px */
+  
+  --token-font-weight-light: 300;
+  --token-font-weight-normal: 400;
+  --token-font-weight-medium: 500;
+  --token-font-weight-semibold: 600;
+  --token-font-weight-bold: 700;
+  
+  --token-line-height-tight: 1.1;
+  --token-line-height-normal: 1.5;
+  --token-line-height-relaxed: 1.75;
+  
+  --token-letter-spacing-tighter: -0.05em;
+  --token-letter-spacing-tight: -0.025em;
+  --token-letter-spacing-normal: 0em;
+  --token-letter-spacing-wide: 0.025em;
+  --token-letter-spacing-wider: 0.05em;
+  --token-letter-spacing-widest: 0.1em;
+  
+  /* Comprehensive Spacing System */
+  --token-spacing-0: 0;
+  --token-spacing-0-5: 0.125rem;         /* 2px - Micro spacing */
+  --token-spacing-1: 0.25rem;            /* 4px */
+  --token-spacing-1-5: 0.375rem;         /* 6px - Micro spacing */
+  --token-spacing-2: 0.5rem;             /* 8px */
+  --token-spacing-2-5: 0.625rem;         /* 10px - Micro spacing */
+  --token-spacing-3: 0.75rem;            /* 12px */
+  --token-spacing-3-5: 0.875rem;         /* 14px - Micro spacing */
+  --token-spacing-4: 1rem;               /* 16px */
+  --token-spacing-4-5: 1.125rem;         /* 18px - Micro spacing */
+  --token-spacing-5: 1.25rem;            /* 20px */
+  --token-spacing-5-5: 1.375rem;         /* 22px - Micro spacing */
+  --token-spacing-6: 1.5rem;             /* 24px */
+  --token-spacing-6-5: 1.625rem;         /* 26px - Micro spacing */
+  --token-spacing-7: 1.75rem;            /* 28px - Micro spacing */
+  --token-spacing-7-5: 1.875rem;         /* 30px - Micro spacing */
+  --token-spacing-8: 2rem;               /* 32px */
+  --token-spacing-10: 2.5rem;            /* 40px */
+  --token-spacing-12: 3rem;              /* 48px */
+  --token-spacing-16: 4rem;              /* 64px */
+  --token-spacing-20: 5rem;              /* 80px */
+  --token-spacing-24: 6rem;              /* 96px */
+  --token-spacing-28: 7rem;              /* 112px - Macro spacing */
+  --token-spacing-32: 8rem;              /* 128px - Macro spacing */
+  --token-spacing-36: 9rem;              /* 144px - Macro spacing */
+  --token-spacing-40: 10rem;             /* 160px - Macro spacing */
+  --token-spacing-44: 11rem;             /* 176px - Macro spacing */
+  --token-spacing-48: 12rem;             /* 192px - Macro spacing */
+  --token-spacing-52: 13rem;             /* 208px - Macro spacing */
+  --token-spacing-56: 14rem;             /* 224px - Macro spacing */
+  --token-spacing-60: 15rem;             /* 240px - Macro spacing */
+  --token-spacing-64: 16rem;             /* 256px - Macro spacing */
+  --token-spacing-72: 18rem;             /* 288px - Macro spacing */
+  --token-spacing-80: 20rem;             /* 320px - Macro spacing */
+  --token-spacing-96: 24rem;             /* 384px - Macro spacing */
+  
+  /* Comprehensive Border System */
+  --token-border-width-0: 0;
+  --token-border-width-1: 1px;
+  --token-border-width-2: 2px;
+  --token-border-width-3: 3px;
+  --token-border-width-4: 4px;
+  --token-border-width-8: 8px;
+  
+  --token-radius-none: 0;
+  --token-radius-xs: 0.125rem;           /* 2px */
+  --token-radius-sm: 0.25rem;            /* 4px */
+  --token-radius-md: 0.5rem;             /* 8px */
+  --token-radius-lg: 0.75rem;            /* 12px */
+  --token-radius-xl: 1rem;               /* 16px */
+  --token-radius-2xl: 1.5rem;            /* 24px */
+  --token-radius-3xl: 2rem;              /* 32px */
+  --token-radius-full: 9999px;
+  
+  /* Opacity System */
+  --token-opacity-0: 0;
+  --token-opacity-5: 0.05;
+  --token-opacity-10: 0.1;
+  --token-opacity-15: 0.15;
+  --token-opacity-20: 0.2;
+  --token-opacity-25: 0.25;
+  --token-opacity-30: 0.3;
+  --token-opacity-40: 0.4;
+  --token-opacity-50: 0.5;
+  --token-opacity-60: 0.6;
+  --token-opacity-70: 0.7;
+  --token-opacity-75: 0.75;
+  --token-opacity-80: 0.8;
+  --token-opacity-90: 0.9;
+  --token-opacity-95: 0.95;
+  --token-opacity-100: 1;
+  
+  /* Focus Ring Tokens */
+  --token-focus-ring-width: 2px;
+  --token-focus-ring-offset: 2px;
+  --token-focus-ring-color: 258 73% 59%; /* Brand purple */
+  
+  /* Component State Tokens - Form Elements */
+  --token-form-border-default: #E5E7EB;
+  --token-form-bg-default: #FFFFFF;
+  --token-form-text-default: #1F1F1F;
+  --token-form-border-hover: #D1D5DB;
+  --token-form-bg-hover: #F9FAFB;
+  --token-form-border-focus: #7A51E1;
+  --token-form-bg-focus: #FFFFFF;
+  --token-form-ring-focus: rgba(122, 81, 225, 0.1);
+  --token-form-border-error: #EF4444;
+  --token-form-bg-error: #FEF2F2;
+  --token-form-text-error: #DC2626;
+  --token-form-border-disabled: #E5E7EB;
+  --token-form-bg-disabled: #F3F4F6;
+  --token-form-text-disabled: #9CA3AF;
+  --token-form-opacity-disabled: 0.6;
+  
+  /* Component State Tokens - Buttons */
+  --token-button-primary-bg: #7A51E1;
+  --token-button-primary-text: #FFFFFF;
+  --token-button-primary-bg-hover: #6941C7;
+  --token-button-primary-bg-active: #5832A3;
+  --token-button-secondary-bg: #E3C76F;
+  --token-button-secondary-text: #1F1F1F;
+  --token-button-secondary-bg-hover: #D4B054;
+  --token-button-secondary-bg-active: #B0923E;
+  --token-button-ghost-bg: transparent;
+  --token-button-ghost-text: #1F1F1F;
+  --token-button-ghost-bg-hover: #F9FAFB;
+  --token-button-ghost-bg-active: #F3F4F6;
+  --token-button-disabled-bg: #E5E7EB;
+  --token-button-disabled-text: #9CA3AF;
+  
+  /* Component Dimension Tokens */
+  --token-button-height-sm: 2rem;        /* 32px */
+  --token-button-height-md: 2.5rem;      /* 40px */
+  --token-button-height-lg: 3rem;        /* 48px */
+  --token-card-padding: 1.5rem;          /* 24px */
+  --token-input-height: 2.5rem;          /* 40px */
+  
+  /* Component State Tokens - Cards */
+  --token-card-bg-default: #FFFFFF;
+  --token-card-border-default: #E5E7EB;
+  --token-card-shadow-default: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --token-card-border-hover: #D1D5DB;
+  --token-card-shadow-hover: 0 4px 6px rgba(0, 0, 0, 0.07);
+  --token-card-transform-hover: translateY(-1px);
+  --token-card-bg-active: #F9FAFB;
+  --token-card-border-active: #7A51E1;
+  
+  /* Component State Tokens - Tables */
+  --token-table-header-bg: #F9FAFB;
+  --token-table-header-text: #1F1F1F;
+  --token-table-header-border: #E5E7EB;
+  --token-table-row-bg-default: #FFFFFF;
+  --token-table-row-text-default: #1F1F1F;
+  --token-table-row-bg-hover: #F9FAFB;
+  --token-table-row-bg-selected: #F8F5FF;
 }
 
 /* ===========================================

@@ -12,21 +12,27 @@
 
 ## Key Architecture Documents
 
+**📁 All documentation is now located in the `/docs` folder**
+
 ### Primary References
-- **`Architecture_Ver5_Comprehensive.md`** - Complete system architecture
+- **`docs/Architecture_Ver5_Comprehensive.md`** - Complete system architecture
   - *Access during*: Planning, system design, feature implementation, troubleshooting
   - *Contains*: Full technical specifications, data models, API structures
 
-- **`IMPLEMENTATION_SUMMARY.md`** - Implementation status and progress
+- **`docs/IMPLEMENTATION_SUMMARY.md`** - Implementation status and progress
   - *Access during*: Project status checks, planning next features, identifying completed work
 
 ### Testing & Quality
-- **`TESTING_GUIDE.md`** - Testing strategies and procedures
+- **`docs/TESTING_GUIDE.md`** - Testing strategies and procedures
   - *Access during*: Writing tests, debugging, quality assurance, pre-deployment checks
 
 ### Development Workflow
-- **`Platform_Upgrade_Workflow.md`** - Development and deployment processes
+- **`docs/Platform_Upgrade_Workflow.md`** - Development and deployment processes
   - *Access during*: Code changes, version updates, deployment planning
+
+### Design System
+- **`docs/DESIGN_SYSTEM_INTEGRATION.md`** - Design system integration guide
+  - *Access during*: UI development, design system usage, token implementation
 
 ## Setup System Architecture
 
@@ -86,11 +92,12 @@
 **CRITICAL**: Update these files whenever making significant changes:
 
 ### Always Update After Changes:
-- **`CLAUDE.md`** - This file, for new features, architecture changes, development guidelines
-- **`Architecture_Ver5_Comprehensive.md`** - For system architecture, data models, API changes
-- **`IMPLEMENTATION_SUMMARY.md`** - For feature completion status, implementation progress
-- **`TESTING_GUIDE.md`** - For new testing procedures, quality standards
-- **`Platform_Upgrade_Workflow.md`** - For deployment processes, version management
+- **`docs/CLAUDE.md`** - This file, for new features, architecture changes, development guidelines
+- **`docs/Architecture_Ver5_Comprehensive.md`** - For system architecture, data models, API changes
+- **`docs/IMPLEMENTATION_SUMMARY.md`** - For feature completion status, implementation progress
+- **`docs/TESTING_GUIDE.md`** - For new testing procedures, quality standards
+- **`docs/Platform_Upgrade_Workflow.md`** - For deployment processes, version management
+- **`docs/DESIGN_SYSTEM_INTEGRATION.md`** - For design system updates, token changes
 
 ### Version Sync Protocol:
 1. **Before Major Changes**: Read current architecture docs to understand existing patterns
@@ -123,7 +130,8 @@ Please use the Playwright MCP server when making visual changes to the front-end
 - Please use Context7 MCP server to find the relevant, up-to-date documentation when working with 3rd party libraries
 - Prioritize official documentation over Stack Overflow or outdated tutorials
 - Verify library versions match project dependencies
-- Update CLAUDE.md when adding new dependencies or changing tech stack
+- Update `docs/CLAUDE.md` when adding new dependencies or changing tech stack
+- Reference `docs/DESIGN_SYSTEM_INTEGRATION.md` for design system token usage and implementation patterns
 
 ## Current Development Priority
 1. **Setup Wizard Enhancement**: Add tooltips, email config, storage config ✅

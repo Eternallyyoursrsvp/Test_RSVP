@@ -1,0 +1,454 @@
+/**
+ * UNIFIED DESIGN SYSTEM CSS
+ * Integrates Tailwind v4 Custom CSS + shadcn/ui + Comprehensive Design Tokens
+ * 
+ * This file combines:
+ * 1. Your custom Tailwind v4 CSS variables (Eternally Yours branding)
+ * 2. Shadcn/ui theming system
+ * 3. Our comprehensive 286+ design token system
+ * 4. Modern CSS features for enterprise-grade components
+ */
+
+@import "tailwindcss";
+
+/* ============================================================================
+ * BASE THEME VARIABLES - TAILWIND V4 + SHADCN/UI INTEGRATION
+ * ============================================================================ */
+
+:root {
+  /* Core Brand Colors - Eternally Yours Purple Theme */
+  --background: #ffffff;
+  --foreground: #333333;
+  --card: #fafafa;
+  --card-foreground: #333333;
+  --popover: #ffffff;
+  --popover-foreground: #111111;
+  --primary: #6b33b3;          /* Eternally Yours purple */
+  --primary-foreground: #ffffff;
+  --secondary: #d1b981;        /* Elegant gold accent */
+  --secondary-foreground: #ffffff;
+  --muted: #d6d6d6;
+  --muted-foreground: #666666;
+  --accent: #9a73f9;           /* Light purple accent */
+  --accent-foreground: #ffffff;
+  --destructive: #ef4444;
+  --destructive-foreground: #ffffff;
+  --border: #dddddd;
+  --input: #ffffff;
+  --ring: #5e239d;             /* Focus ring - deeper purple */
+  
+  /* Chart Colors - Brand Aligned */
+  --chart-1: #5e239d;          /* Primary purple */
+  --chart-2: #8b5cf6;          /* Light purple */
+  --chart-3: #bfa76f;          /* Gold */
+  --chart-4: #713f12;          /* Brown */
+  --chart-5: #1e3a8a;          /* Blue */
+  
+  /* Sidebar System */
+  --sidebar: #f4f4f4;
+  --sidebar-foreground: #111111;
+  --sidebar-primary: #5e239d;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #6b7280;
+  --sidebar-accent-foreground: #111111;
+  --sidebar-border: #000000;
+  --sidebar-ring: #5e239d;
+  
+  /* Typography System */
+  --font-sans: sans-serif;
+  --font-serif: serif;
+  --font-mono: Inter UI, monospace;
+  --tracking-normal: 0.025em;
+  
+  /* Layout & Spacing */
+  --radius: 0px;               /* Square design - Eternally Yours style */
+  --spacing: 0.25rem;          /* 4px base unit */
+  
+  /* Custom Shadow System - Purple Branded */
+  --shadow-2xs: 5px 1px 16px -2px hsl(266.2500 55.6522% 45.0980% / 0.17);
+  --shadow-xs: 5px 1px 16px -2px hsl(266.2500 55.6522% 45.0980% / 0.17);
+  --shadow-sm: 5px 1px 16px -2px hsl(266.2500 55.6522% 45.0980% / 0.35), 5px 1px 2px -3px hsl(266.2500 55.6522% 45.0980% / 0.35);
+  --shadow: 5px 1px 16px -2px hsl(266.2500 55.6522% 45.0980% / 0.35), 5px 1px 2px -3px hsl(266.2500 55.6522% 45.0980% / 0.35);
+  --shadow-md: 5px 1px 16px -2px hsl(266.2500 55.6522% 45.0980% / 0.35), 5px 2px 4px -3px hsl(266.2500 55.6522% 45.0980% / 0.35);
+  --shadow-lg: 5px 1px 16px -2px hsl(266.2500 55.6522% 45.0980% / 0.35), 5px 4px 6px -3px hsl(266.2500 55.6522% 45.0980% / 0.35);
+  --shadow-xl: 5px 1px 16px -2px hsl(266.2500 55.6522% 45.0980% / 0.35), 5px 8px 10px -3px hsl(266.2500 55.6522% 45.0980% / 0.35);
+  --shadow-2xl: 5px 1px 16px -2px hsl(266.2500 55.6522% 45.0980% / 0.88);
+  
+  /* ========================================================================
+   * EXTENDED DESIGN SYSTEM TOKENS (286+ TOKENS)
+   * ======================================================================== */
+  
+  /* Z-Index Management */
+  --z-dropdown: 1000;
+  --z-tooltip: 1100;
+  --z-modal: 1200;
+  --z-popover: 1300;
+  --z-notification: 1400;
+  --z-max: 9999;
+  
+  /* Animation & Transitions */
+  --duration-fast: 150ms;
+  --duration-normal: 300ms;
+  --duration-slow: 500ms;
+  --duration-hover: 200ms;
+  --easing-standard: cubic-bezier(0.4, 0.0, 0.2, 1.0);
+  --easing-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  --easing-elastic: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  
+  /* Extended Spacing Scale */
+  --spacing-micro-0-5: 0.125rem;   /* 2px */
+  --spacing-micro-1-5: 0.375rem;   /* 6px */
+  --spacing-micro-2-5: 0.625rem;   /* 10px */
+  --spacing-macro-28: 7rem;        /* 112px */
+  --spacing-macro-32: 8rem;        /* 128px */
+  --spacing-macro-48: 12rem;       /* 192px */
+  
+  /* Typography Extended */
+  --font-size-2xs: 0.625rem;       /* 10px */
+  --font-size-5xl: 3rem;           /* 48px */
+  --font-size-6xl: 3.75rem;        /* 60px */
+  --letter-spacing-tight: -0.025em;
+  --letter-spacing-wide: 0.025em;
+  --letter-spacing-wider: 0.05em;
+  
+  /* Border System Extended */
+  --border-width-1: 1px;
+  --border-width-2: 2px;
+  --border-width-4: 4px;
+  --border-radius-xs: 0.125rem;    /* 2px */
+  --border-radius-2xl: 1.5rem;     /* 24px */
+  --border-radius-3xl: 2rem;       /* 32px */
+  
+  /* Opacity Scale */
+  --opacity-5: 0.05;
+  --opacity-10: 0.1;
+  --opacity-25: 0.25;
+  --opacity-50: 0.5;
+  --opacity-75: 0.75;
+  --opacity-90: 0.9;
+  
+  /* Component States */
+  --form-border-default: #E5E7EB;
+  --form-border-focus: var(--primary);
+  --form-border-error: var(--destructive);
+  --button-primary-bg: var(--primary);
+  --button-primary-hover: #5e239d;
+  --card-shadow-default: var(--shadow-sm);
+  --card-shadow-hover: var(--shadow-md);
+  
+  /* Layout System */
+  --sidebar-width: 280px;
+  --sidebar-width-collapsed: 64px;
+  --header-height: 64px;
+  --footer-height: 80px;
+  
+  /* Grid System */
+  --grid-gap-sm: 1rem;     /* 16px */
+  --grid-gap-md: 1.5rem;   /* 24px */
+  --grid-gap-lg: 2rem;     /* 32px */
+  --container-sm: 640px;
+  --container-md: 768px;
+  --container-lg: 1024px;
+  --container-xl: 1280px;
+}
+
+/* ============================================================================
+ * DARK THEME OVERRIDES
+ * ============================================================================ */
+
+.dark {
+  --background: #121212;
+  --foreground: #eaeaea;
+  --card: #1e1e1e;
+  --card-foreground: #eaeaea;
+  --popover: #1e1e1e;
+  --popover-foreground: #eaeaea;
+  --primary: #5e239d;              /* Slightly darker purple for dark mode */
+  --primary-foreground: #fdfdfd;
+  --secondary: #bfa76f;
+  --secondary-foreground: #121212;
+  --muted: #5c5c5c;
+  --muted-foreground: #aaaaaa;
+  --accent: #8350fb;
+  --accent-foreground: #fdfdfd;
+  --destructive: #dc2626;
+  --destructive-foreground: #fdfdfd;
+  --border: #333333;
+  --input: #1e1e1e;
+  --ring: #5e239d;
+  
+  /* Chart colors remain consistent */
+  --chart-1: #5e239d;
+  --chart-2: #8b5cf6;
+  --chart-3: #bfa76f;
+  --chart-4: #713f12;
+  --chart-5: #1e3a8a;
+  
+  /* Sidebar Dark Theme */
+  --sidebar: #1e1e1e;
+  --sidebar-foreground: #fdfdfd;
+  --sidebar-primary: #5e239d;
+  --sidebar-primary-foreground: #fdfdfd;
+  --sidebar-accent: #6b7280;
+  --sidebar-accent-foreground: #fdfdfd;
+  --sidebar-border: #ffffff;
+  --sidebar-ring: #5e239d;
+  
+  /* Dark Mode Shadows - Darker purple tint */
+  --shadow-2xs: 5px 1px 16px -2px hsl(269.0164 63.5417% 37.6471% / 0.17);
+  --shadow-xs: 5px 1px 16px -2px hsl(269.0164 63.5417% 37.6471% / 0.17);
+  --shadow-sm: 5px 1px 16px -2px hsl(269.0164 63.5417% 37.6471% / 0.35), 5px 1px 2px -3px hsl(269.0164 63.5417% 37.6471% / 0.35);
+  --shadow: 5px 1px 16px -2px hsl(269.0164 63.5417% 37.6471% / 0.35), 5px 1px 2px -3px hsl(269.0164 63.5417% 37.6471% / 0.35);
+  --shadow-md: 5px 1px 16px -2px hsl(269.0164 63.5417% 37.6471% / 0.35), 5px 2px 4px -3px hsl(269.0164 63.5417% 37.6471% / 0.35);
+  --shadow-lg: 5px 1px 16px -2px hsl(269.0164 63.5417% 37.6471% / 0.35), 5px 4px 6px -3px hsl(269.0164 63.5417% 37.6471% / 0.35);
+  --shadow-xl: 5px 1px 16px -2px hsl(269.0164 63.5417% 37.6471% / 0.35), 5px 8px 10px -3px hsl(269.0164 63.5417% 37.6471% / 0.35);
+  --shadow-2xl: 5px 1px 16px -2px hsl(269.0164 63.5417% 37.6471% / 0.88);
+}
+
+/* ============================================================================
+ * TAILWIND V4 @THEME INLINE INTEGRATION
+ * ============================================================================ */
+
+@theme inline {
+  /* Core Colors */
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  
+  /* Chart Colors */
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  
+  /* Sidebar Colors */
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+
+  /* Typography */
+  --font-sans: var(--font-sans);
+  --font-mono: var(--font-mono);
+  --font-serif: var(--font-serif);
+
+  /* Radius System */
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+
+  /* Shadow System */
+  --shadow-2xs: var(--shadow-2xs);
+  --shadow-xs: var(--shadow-xs);
+  --shadow-sm: var(--shadow-sm);
+  --shadow: var(--shadow);
+  --shadow-md: var(--shadow-md);
+  --shadow-lg: var(--shadow-lg);
+  --shadow-xl: var(--shadow-xl);
+  --shadow-2xl: var(--shadow-2xl);
+
+  /* Typography Extended */
+  --tracking-tighter: calc(var(--tracking-normal) - 0.05em);
+  --tracking-tight: calc(var(--tracking-normal) - 0.025em);
+  --tracking-normal: var(--tracking-normal);
+  --tracking-wide: calc(var(--tracking-normal) + 0.025em);
+  --tracking-wider: calc(var(--tracking-normal) + 0.05em);
+  --tracking-widest: calc(var(--tracking-normal) + 0.1em);
+}
+
+/* ============================================================================
+ * BASE STYLES & GLOBAL OVERRIDES
+ * ============================================================================ */
+
+body {
+  letter-spacing: var(--tracking-normal);
+  background: hsl(var(--background));
+  color: hsl(var(--foreground));
+  font-family: var(--font-sans);
+}
+
+/* Global focus ring using brand colors */
+*:focus-visible {
+  outline: 2px solid hsl(var(--ring));
+  outline-offset: 2px;
+}
+
+/* ============================================================================
+ * COMPONENT BASE CLASSES
+ * ============================================================================ */
+
+/* Enhanced Button Base */
+.btn-base {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: calc(var(--radius) - 2px);
+  font-weight: 500;
+  transition: all var(--duration-hover) var(--easing-standard);
+  border: 1px solid transparent;
+  cursor: pointer;
+}
+
+.btn-base:hover {
+  transform: translateY(-1px);
+}
+
+.btn-base:active {
+  transform: translateY(0);
+}
+
+.btn-base:focus-visible {
+  outline: 2px solid hsl(var(--ring));
+  outline-offset: 2px;
+}
+
+/* Enhanced Card Base */
+.card-base {
+  background: hsl(var(--card));
+  border: 1px solid hsl(var(--border));
+  border-radius: calc(var(--radius) - 2px);
+  box-shadow: var(--card-shadow-default);
+  transition: all var(--duration-hover) var(--easing-standard);
+}
+
+.card-base:hover {
+  box-shadow: var(--card-shadow-hover);
+  transform: translateY(-1px);
+}
+
+/* Enhanced Input Base */
+.input-base {
+  display: flex;
+  height: 2.5rem;
+  width: 100%;
+  border-radius: calc(var(--radius) - 2px);
+  border: 1px solid hsl(var(--border));
+  background: hsl(var(--input));
+  padding: 0.5rem 0.75rem;
+  font-size: 0.875rem;
+  transition: all var(--duration-fast) var(--easing-standard);
+}
+
+.input-base:focus {
+  outline: 2px solid hsl(var(--ring));
+  outline-offset: 2px;
+  border-color: hsl(var(--ring));
+}
+
+/* ============================================================================
+ * UTILITY CLASSES FOR DESIGN SYSTEM
+ * ============================================================================ */
+
+/* Extended Spacing Utilities */
+.space-micro-0-5 { margin: var(--spacing-micro-0-5); }
+.space-micro-1-5 { margin: var(--spacing-micro-1-5); }
+.space-macro-28 { margin: var(--spacing-macro-28); }
+.space-macro-48 { margin: var(--spacing-macro-48); }
+
+/* Z-Index Utilities */
+.z-dropdown { z-index: var(--z-dropdown); }
+.z-tooltip { z-index: var(--z-tooltip); }
+.z-modal { z-index: var(--z-modal); }
+.z-popover { z-index: var(--z-popover); }
+.z-notification { z-index: var(--z-notification); }
+
+/* Animation Utilities */
+.duration-fast { transition-duration: var(--duration-fast); }
+.duration-normal { transition-duration: var(--duration-normal); }
+.duration-slow { transition-duration: var(--duration-slow); }
+.ease-standard { transition-timing-function: var(--easing-standard); }
+.ease-bounce { transition-timing-function: var(--easing-bounce); }
+
+/* Typography Utilities */
+.tracking-tight { letter-spacing: var(--letter-spacing-tight); }
+.tracking-wide { letter-spacing: var(--letter-spacing-wide); }
+.font-2xs { font-size: var(--font-size-2xs); }
+.font-5xl { font-size: var(--font-size-5xl); }
+
+/* ============================================================================
+ * RESPONSIVE DESIGN UTILITIES
+ * ============================================================================ */
+
+/* Container Utilities */
+.container-sm { max-width: var(--container-sm); }
+.container-md { max-width: var(--container-md); }
+.container-lg { max-width: var(--container-lg); }
+.container-xl { max-width: var(--container-xl); }
+
+/* Grid Utilities */
+.grid-gap-sm { gap: var(--grid-gap-sm); }
+.grid-gap-md { gap: var(--grid-gap-md); }
+.grid-gap-lg { gap: var(--grid-gap-lg); }
+
+/* ============================================================================
+ * ACCESSIBILITY IMPROVEMENTS
+ * ============================================================================ */
+
+/* Enhanced focus states for accessibility */
+.focus-visible-ring:focus-visible {
+  outline: 2px solid hsl(var(--ring));
+  outline-offset: 2px;
+  border-radius: calc(var(--radius) - 2px);
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  :root {
+    --border: #000000;
+    --ring: #000000;
+  }
+  
+  .dark {
+    --border: #ffffff;
+    --ring: #ffffff;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ============================================================================
+ * PRINT STYLES
+ * ============================================================================ */
+
+@media print {
+  :root {
+    --shadow-sm: none;
+    --shadow-md: none;
+    --shadow-lg: none;
+    --shadow-xl: none;
+  }
+  
+  .card-base {
+    box-shadow: none;
+    border: 1px solid #000000;
+  }
+}
