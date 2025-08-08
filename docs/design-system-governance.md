@@ -18,16 +18,16 @@ Establish permanent design system governance to prevent future inconsistencies a
 ```typescript
 // ❌ NEVER DO THIS - Hardcoded values
 const Button = styled.button`
-  color: #7A51E1;           // Hardcoded color
-  padding: 16px 24px;       // Hardcoded spacing
-  border-radius: 8px;       // Hardcoded radius
-  box-shadow: 0 4px 6px rgba(0,0,0,0.07); // Hardcoded shadow
+  color: /* #7A51E1 */;           // Hardcoded color - PROHIBITED
+  padding: /* 16px 24px */;       // Hardcoded spacing - PROHIBITED
+  border-radius: /* 8px */;       // Hardcoded radius - PROHIBITED
+  box-shadow: /* 0 4px 6px rgba(0,0,0,0.07) */; // Hardcoded shadow - PROHIBITED
 `;
 
 // ❌ NEVER DO THIS - Arbitrary Tailwind values
-<button className="bg-[#7A51E1] text-[#FFFFFF] rounded-[8px] px-[16px]">
-  Bad Button
-</button>
+// <button className="bg-[hardcoded] text-[hardcoded] rounded-[hardcoded]">
+//   Bad Button - DO NOT USE ARBITRARY VALUES
+// </button>
 
 // ✅ ALWAYS DO THIS - Shadcn/ui CSS variables
 const Button = styled.button`
